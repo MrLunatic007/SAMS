@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block title %}Teacher Assignments{% endblock title %}
+    </head>
+    {% block extra_css %}
+
+    .card-container {
+        left: 0;
+        display: flex;
+        flex-wrap: wrap; /* Allows cards to wrap to the next row if they exceed container width */
+        gap: 0.5rem; /* Adds spacing between cards */
+        justify-content: flex-start; /* Aligns cards to the left */
+    }
+
+    main {
+        margin: 0;
+        padding: 0;
+    }
+    
+    
+
+    .cookieCard {
+        top: 10rem;
+        left: 0;
+        {% comment %} left: 3rem; {% endcomment %}
+        width: 300px;
+        height: 200px;
+        background: linear-gradient(to right,rgb(137, 104, 255),rgb(175, 152, 255));
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 3rem;
+         flex: none; /* Prevent cards from stretching or shrinking */
+        max-width: 300px; /* Ensures a maximum width */
+    }
+
+    .cookieCard::before {
+        width: 150px;
+        height: 150px;
+        content: "";
+        background: linear-gradient(to right,rgb(142, 110, 255),rgb(208, 195, 255));
+        position: absolute;
+        z-index: 1;
+        border-radius: 50%;
+        right: -25%;
+        top: -25%;
+    }
+
+    .cookieHeading {
+        font-size: 1.5em;
+        font-weight: 600;
+        color: rgb(241, 241, 241);
+        z-index: 2;
+    }
+
+    .cookieDescription {
+        font-size: 0.9em;
+        color: rgb(241, 241, 241);
+        z-index: 2;
+    }
+
+    .cookieDescription a {
+        color: rgb(241, 241, 241);
+    }
+
+    .acceptButton {
+        padding: 11px 20px;
+        background-color: #7b57ff;
+        transition-duration: .2s;
+        border: none;
+        color: rgb(241, 241, 241);
+        cursor: pointer;
+        font-weight: 600;
+        z-index: 2;
+    }
+
+    .acceptButton:hover {
+        background-color: #714aff;
+        transition-duration: .2s;
+    }
+    {% endblock extra_css %}
+
+    <body>
+        {% block content %}
+        <main>
+            <div class="card-container">
+                <h2>Assignments</h2>
+                {% if assignment and assignment|length > 0 %}
+                <div class="cookieCard">
+                    <p class="cookieHeading">Cookies.</p>
+                    <p class="cookieDescription">By using this website you automatically accept that we use cookies. <a href="#">What for?</a></p>
+                    <button class="acceptButton">Understood</button>
+                </div>
+                {% else %}
+                <p>No Assignments Yet</p>
+                {% endif %}
+            </div>
+            
+        </main>
+        {% endblock content %}
+        
+    </body>
+</html>

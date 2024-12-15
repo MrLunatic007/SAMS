@@ -1,0 +1,172 @@
+:root {
+    --primary-color: #3b82f6;
+    --primary-dark: #1d4ed8;
+    --text-color: #fff;
+    --bg-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --success-color: #10b981;
+    --error-color: #ef4444;
+    --warning-color: #f59e0b;
+    --info-color: #3b82f6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-gradient);
+}
+
+.wrapper {
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem;
+}
+
+.form-container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.75rem;
+}
+
+/* Messages Styling */
+.messages {
+    list-style: none;
+    margin-bottom: 1.5rem;
+    padding: 0;
+}
+
+.messages li {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.messages li:last-child {
+    margin-bottom: 0;
+}
+
+.messages .error {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fecaca;
+}
+
+.messages .success {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #a7f3d0;
+}
+
+.messages .warning {
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #fde68a;
+}
+
+.messages .info {
+    background: rgba(59, 130, 246, 0.2);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #bfdbfe;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+label svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    opacity: 0.8;
+}
+
+.u-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.u-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.u-input:focus {
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+/* Blur effect */
+.form-container:has(.u-input:focus) .u-input:not(:focus),
+.form-container.has-value .u-input:not(:focus) {
+    filter: blur(4px);
+    opacity: 0.7;
+}
+
+.btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: white;
+    color: var(--primary-color);
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-1px);
+}   

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Teacher NoticeBoard{% endblock title %}
+
+{% block extra_css %}
+    .notice-form-container {
+        position: absolute;
+        top: 6rem; /* Adjust this value to position the form below the header */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000; /* Ensure the form is on top of other elements */
+        width: 80%;
+        max-width: 600px;
+        display: None;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--color-dark);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid var(--color-light);
+        border-radius: var(--border-radius-1);
+        background-color: var(--color-background);
+    }
+
+    .notice-form-container button {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        border: none;
+        padding: 0.5rem 1rem;
+        margin-right: 1rem;
+        border-radius: var(--border-radius-1);
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .notice-form-container button:hover {
+        background-color: var(--color-dark);
+    }
+
+    #openbtn {
+        position: absolute;
+        left: 40rem; /* Original position */
+        top: 15rem;  /* Original position */
+        width: 15rem;
+        height: 5rem;
+        border-radius: 2rem;
+        border: none;
+        background: var(--color-primary);
+        transition: top 0.3s ease, left 0.3s ease; /* Smooth transition */
+    }
+    
+    #openbtn:hover {
+        background: #7328ec;
+    }
+{% endblock extra_css %}
+
+{% block content %}
+
+    <button id="openbtn" onclick="Open()">Create Form</button>
+
+    <div class="notice-form-container" id="notice-form" style="display: none;">
+        <h2>Create New Notice</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="importance">Importance</label>
+                <select id="importance" name="importance">
+                    <option value="normal">Normal</option>
+                    <option value="important">Important</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="content">Notice Content</label>
+                <textarea id="content" name="content" required></textarea>
+            </div>
+            <button type="submit">Create Notice</button>
+        </form>
+    </div>
+{% endblock content %}
+
+
+{% block extra_js %}
+    const btn = document.getElementById('openbtn');
+    const n_form = document.getElementById('notice-form');
+
+    function Open() {
+        if (n_form.style.display === "none" || n_form.style.display === "") {
+            // Show the form and move the button to the top-left
+            n_form.style.display = "block";
+            btn.innerHTML = "Close Form";
+            btn.style.top = "1rem";
+            btn.style.left = "1rem";
+        } else {
+            // Hide the form and return the button to its original position
+            n_form.style.display = "none";
+            btn.innerHTML = "Create Form";
+            btn.style.top = "15rem";  // Original position
+            btn.style.left = "40rem"; // Original position
+        }
+    }
+
+{% endblock extra_js %}

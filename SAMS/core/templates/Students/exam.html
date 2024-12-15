@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %}Student Exams{% endblock title %}
+</head>
+
+{% block active %}"active"{% endblock active %}
+
+{% block extra_css %}
+    body{overflow: hidden;}
+        header{position: relative;}
+        .exam{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 80vh;
+            width: 80%;
+            margin: auto;
+        }
+    {% endblock extra_css %}
+
+<body>
+    {% block content %}
+
+    <main>
+            <div class="exam timetable">
+                {% if exams %}
+                <h2>Exams Available</h2>
+                {% else %}
+                <h2>No Exams Available</h2>
+                {% endif %}
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Subject</th>
+                            <th>Room no.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>13 May 2022</td>
+                            <td>09-12 AM</td>
+                            <td>CS200</td>
+                            <td>38-718</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+        </main>
+    {% endblock content %}
+    </body>
+</html>
