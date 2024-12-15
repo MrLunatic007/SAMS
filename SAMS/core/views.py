@@ -25,7 +25,7 @@ def studentdash(request):
     try:
         student_profile = StudentProfile.objects.get(user=request.user)
         subjects = Subjects.objects.all()
-    except StudentProfile.DoesNotExist or Subject.DoesNotExist:
+    except StudentProfile.DoesNotExist or Subjects.DoesNotExist:
         student_profile = None  # Handle the case where the profile doesn't exist
         subjects = None
 

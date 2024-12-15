@@ -29,7 +29,7 @@ def login_user(request):
                     messages.success(request, f'Welcome back {username}!')
                     return redirect('core:teacher_dash')
                 else:
-                    messages.error(requests, f'{user} role is not specified')
+                    messages.error(request, f'{user} role is not specified')
             else:
                 messages.error(request, "Invalid username or password. Please try again.")
         else:
