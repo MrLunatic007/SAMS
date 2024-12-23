@@ -151,28 +151,27 @@
 
             <div class="notice-form-container" id="assign-form" style="display: none;">
                 <h2>Create New Assignments</h2>
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="title">Title</label>
                         <input type="text" id="title" name="title" required>
                     </div>
-                   <div class="form-group">
-                    <label for="start_date">Due Date</label>
-                    <input type="date" id="due_date" name="due_date" required>
-                   </div>
-                   <div class="form-group">
-                    <label for="file">File</label>
-                    <input type="file" name="file" id="file" enctype="multipart/form-data">
-                   </div>
                     <div class="form-group">
-                        <label for="content">Description</label>
+                        <label for="due_date">Due Date</label>
+                        <input type="date" id="due_date" name="due_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="file">File</label>
+                        <input type="file" name="file" id="file">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
                         <textarea id="description" name="description" required></textarea>
                     </div>
-                    <button type="submit" class="submit-btn">Create Assignments</button>
+                    <button type="submit" class="submit-btn">Create Assignment</button>
                 </form>
             </div>
-
             <div class="assignment-container">
                 {% if assigns %}
                     {% for assign in assigns %}

@@ -107,32 +107,21 @@ def teacherdash(request):
 @login_required(login_url='members:user_login')
 def t_assignments(request):
     if request.method == "POST":
-        name = request.POST.get('title')  # Corrected syntax
+        name = request.POST.get('title')
         due_date = request.POST.get('due_date')
-        file = request.FILES.get('file')  # Handle file uploads using request.FILES
+        file = request.FILES.get('file')
         description = request.POST.get('description')
 
-        print(file)
+        new_assign = Assignments(
+            name=name,
+            description=description,
+            due_date=due_date,
+            file_name=file,
+        )
+        new_assign.save()
+            
+        return redirect('core:teacher_assignments')
 
-        # Create and save the new assignment
-        try: 
-            new_assign = Assignments(
-                name=name,
-                description=description,
-                due_date=due_date,
-                file_name=file,  # Ensure this matches the field in the model
-            )
-            new_assign.save()
-        except Exception as e:
-            print("Error saving assignment:", e)
-
-
-        print(new_assign.file_name)
-
-        # Redirect to the same page to avoid duplicate submissions
-        return redirect('core:teacher_assignments')  # Replace 't_assignments' with the actual URL name
-
-    # Always fetch assignments for both POST and GET requests
     assigns = Assignments.objects.all()
     return render(request, 'Teachers/assignments.html', {'assigns': assigns})
 
