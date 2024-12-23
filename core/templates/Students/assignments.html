@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block title %}Student Assignments{% endblock title %}
+</head>
+{% block extra_css %}
+.assignment-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 2rem;
+}
+
+.assignment-card {
+width: 90rem;
+background-color: white;
+border-radius: 8px;
+overflow: hidden;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+margin-bottom: 2rem;
+transition: transform 0.3s ease;
+}
+
+.assignment-card:hover {
+transform: translateY(-5px);
+}
+
+.assignment-content {
+padding: 1.5rem;
+}
+
+.assignment-title {
+font-size: 1.2rem;
+font-weight: bold;
+margin-bottom: 0.5rem;
+}
+
+.assignment-description {
+font-size: 1rem;
+color: #666;
+}
+{% endblock extra_css %}
+
+<body>
+    {% block content %}
+    <main>
+        <div class="assignment-container">
+            {% if assigns %}
+            {% for assign in assigns %}
+            <div class="assignment-card">
+                <div class="assignment-content">
+                    <div class="assignment-title">{{assign.name}}</div>
+                    <div class="assignment-description">{{assign.description}}</div>
+                    <div class="assignment-duedate">{{assign.due_date}}</div>
+                    <div class="assignment-file">{{assign.file_name}}</div>
+                    <a href="{% url 'core:download' assign.id %}" class="downbtn">Download</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h2>No Assignments</h2>
+            {% endif %}
+        </div>
+
+    </main>
+    {% endblock content %}
+
+</body>
+
+</html>

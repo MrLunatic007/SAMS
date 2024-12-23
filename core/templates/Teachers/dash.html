@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+<head>
+    {% block title %}Teacher Dashboard{% endblock title %}
+</head>
+
+<body>
+    {% block content %}
+    <div class="container">
+        <aside>
+            <!--Profile Done-->
+            <div class="profile">
+                <div class="top">
+                    <div class="info">
+                        <p>Hey, <b>{{ user.get_full_name }}</b></p>
+                        {% if teacher_profile %}
+                            <small class="text-muted">{{ teacher_profile.teacher_id }}</small>
+                        {% else %}
+                            <small class="text-muted">No Student ID</small>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="about">
+                    {% if user.is_teacher %}
+                    <h5>Teaching Subjects</h5>
+                    {% elif user.is_student %}
+                    <h5>Learning Subjects</h5>
+                    {% endif %}
+                    {% if subjects_taught %}
+                    <p>{% for subject in subjects_taught %}
+                            <li>{{subject.name}}</li>
+                        {% empty %}
+                            <li>No subjects</li>
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                    <h5>DOB</h5>
+                    <p>{{ user.date_of_birth }}</p>
+                    {% if user.is_student %}
+                    <h5>Guardian Contact</h5>
+                    <p>{{ student_profile.guardian_contact }}</p>
+                    {% endif %}
+
+                    {% if user.is_teacher %}
+                    <h5>Work Email Address</h5>
+                    {% elif user.is_student %}
+                    <h5>Student Email Address</h5>
+                    {% endif %}
+                    <p>{{ user.email }}</p>
+                </div>
+            </div>
+        </aside>
+        
+
+        <main>
+            <h1>Teaching Subjects</h1>
+            <div class="subjects">
+                {% if subjects_taught %}
+                    {% for subject in subjects_taught %}
+                        <div class="eg">
+                            <h3>{{ subject.name }}</h3>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No subjects assigned yet.</p>
+                {% endif %}
+            </div>
+        </main>
+
+        <div class="right">
+            <h2>NoticeBoard</h2>
+            <div class="announcements">
+                {% if noticeeb %}
+                <div class="updates">
+                {% for notice in noticeb %}
+                    <div class="message">
+                        <h4 style="font-size: 1rem;">{{notice.name}}</h4>
+                        <p style="font-size: 0,6rem;">{{notice.description}}</p>
+                        <small class="text-muted">Importance: <b style="color: red;">{{notice.importance}}<b></small>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <small class="text-muted">No Notices</small>
+                {% endif %}
+            </div>
+            </div>
+
+        </div>
+        
+    </div>
+    {% endblock content %}
+</body>
+</html>

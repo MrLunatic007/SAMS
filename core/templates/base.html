@@ -1,0 +1,74 @@
+{% load static %}
+
+<!DOCTYPE>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{% endblock title %}</title>
+        <link rel="shortcut icon" href="./images/logo.png">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+        <link rel="stylesheet" href="{% static "css/dash_style.css" %}">
+    </head>
+
+    <style>
+        {% block extra_css %}{% endblock extra_css %}
+    </style>
+
+    <body>
+        <header>
+            <!--Navigation bar not done-->
+            <div class="logo" title="University Management System">
+                <h2>S<span class="danger">M</span>S</h2>
+            </div>
+            <div class="navbar">
+                {% if user.is_student %}
+                <a href="{% url "core:student_dash" %}">
+                {% elif user.is_teacher %}
+                <a href="{% url "core:teacher_dash" %}">
+                {% endif %}
+                
+                    <span class="material-icons-sharp">home</span>
+                    <h3>Home</h3>
+                </a>
+                {% if user.is_student %}
+                <a href="{% url "core:student_assignment" %}">
+                {% elif user.is_teacher %}
+                <a href="{% url "core:teacher_assignments" %}">
+                {% endif %}
+                    <span class="material-icons-sharp">assignment</span>
+                    <h3>Assignments</h3>
+                </a>
+
+                {% if user.is_teacher %}
+                <a href="{% url "core:notice" %}">
+                    <span class="material-icons-sharp">
+                        event_note
+                        </span>
+                    <h3>NoticeBoard</h3>
+                </a>
+                {% endif %}
+                <a href="{% url "members:user_logout" %}">
+                    <span class="material-icons-sharp" onclick="">logout</span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+            <div id="profile-btn">
+                <span class="material-icons-sharp">person</span>
+            </div>
+            <div class="theme-toggler">
+                <span class="material-icons-sharp">light_mode</span>
+                <span class="material-icons-sharp active">dark_mode</span>
+            </div>
+            
+        </header>
+        <main class="content">
+            {% block content %}
+            {% endblock content %}      
+        </main>
+        
+        <script src="{% static "js/script.js" %}"></script>
+        <script>{% block extra_js %}{% endblock extra_js %}</script>
+    </body>
+</html>
