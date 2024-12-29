@@ -5,6 +5,8 @@ from members.models import StudentProfile, TeacherProfile, Subjects
 from .models import Notice, Assignments
 from django.http import FileResponse, Http404
 import os
+from django.conf import settings
+from wsgiref.util import FileWrapper
 
 @login_required(login_url='members:user_login')
 def access_denied(request):
@@ -47,31 +49,36 @@ def s_assignment(request):
 
 
 @role_required('is_student')
-@login_required(login_url='memebrs:user_login')
+@login_required(login_url='members:user_login')  # Fixed typo in URL
 def download(request, id):
     # Retrieve the assignment based on the given ID
     item = get_object_or_404(Assignments, id=id)
     
     # Check if the file exists
     if not item.file_name:
-        raise Http404("File not found.")
+        raise Http404("File not found")
     
-    # Get the path to the file in the media directory
-    file_path = item.file_name.path  # This returns the full file path
-
-    print(file_path)
-
-    # Check if the file actually exists on the filesystem
-    if not os.path.exists(file_path):
-        raise Http404("File not found.")
+    # Get the file path
+    file_path = os.path.join(settings.MEDIA_ROOT, str(item.file_name))
     
-    # Serve the file using FileResponse
-    response = FileResponse(open(file_path, 'rb'), content_type='application/octet-stream')
+    # Verify the file exists and is within MEDIA_ROOT
+    if not os.path.exists(file_path) or not os.path.commonpath([file_path, settings.MEDIA_ROOT]) == settings.MEDIA_ROOT:
+        raise Http404("File not found")
     
-    # Set the content-disposition header to trigger a download in the browser
-    response['Content-Disposition'] = f'attachment; filename="{item.file_name.name}"'
+    # Get the filename from the path
+    filename = os.path.basename(file_path)
     
-    return response
+    try:
+        # Open the file in binary mode
+        file = open(file_path, 'rb')
+        # Create the response with the file
+        response = FileResponse(FileWrapper(file), content_type='application/force-download')
+        # Set content disposition and filename
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
+    except Exception as e:
+        print(f"Error serving file: {e}")  # For debugging
+        raise Http404("Error accessing file")
 
 ################################################################################
 ################################################################################
