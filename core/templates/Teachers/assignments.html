@@ -162,6 +162,10 @@
                         <input type="date" id="due_date" name="due_date" required>
                     </div>
                     <div class="form-group">
+                        <label for="creation_date">Creation Date</label>
+                        <p id="creation_date">{{assign.createDate|date:"Y-m-d"}} {{or}} {{current_date|date:"y-m-d"}}</p>
+                    </div>
+                    <div class="form-group">
                         <label for="file">File</label>
                         <input type="file" name="file" id="file">
                     </div>

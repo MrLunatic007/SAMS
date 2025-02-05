@@ -150,7 +150,7 @@
 {% block content %}
 <body>
     <h1 style="text-align: center;">Notices</h1>
-    <button class="AssignBtn" type="button" id="openbtn" onclick="Open()">Create Assignment</button>
+    <button class="AssignBtn" type="button" id="openbtn" onclick="Open()">Create Notice</button>
 
 
     <div class="notice-form-container" id="notice-form" style="display: none;">
@@ -205,13 +205,13 @@
         if (n_form.style.display === "none" || n_form.style.display === "") {
             // Show the form and move the button to the top-left
             n_form.style.display = "block";
-            btn.innerHTML = "Close Form";
+            btn.innerHTML = "Close Notice";
             btn.style.top = "1rem";
             btn.style.left = "1rem";
         } else {
             // Hide the form and return the button to its original position
             n_form.style.display = "none";
-            btn.innerHTML = "Create Form";
+            btn.innerHTML = "Create Notice";
             btn.style.top = "15rem";  // Original position
             btn.style.left = "40rem"; // Original position
         }

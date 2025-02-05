@@ -18,7 +18,8 @@ class Assignments(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=150)
     due_date = models.DateField(auto_now=False, auto_now_add=False)
-    file_name = models.FileField(upload_to='assignments/', max_length=100) 
+    file_name = models.FileField(upload_to='assignments/', max_length=100)
+    createDate=models.DateField(max_length=100, null=True)
 
     def __str__(self):
         return self.name

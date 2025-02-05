@@ -19,6 +19,8 @@ urlpatterns =[
     path('student/dashboard', views.studentdash, name="student_dash"),
     path("student/assignment", views.s_assignment, name="student_assignment"),
     path('student/assignment/download/<int:id>/', views.download, name='download'),
+    path('view-assignment/<int:assignment_id>/', views.view_assignment, name='view_assignment'),
+
 
     ################################################################################
     ################################################################################

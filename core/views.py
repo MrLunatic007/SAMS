@@ -3,10 +3,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .permissions import role_required
 from members.models import StudentProfile, TeacherProfile, Subjects
 from .models import Notice, Assignments
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, HttpResponse
 import os
 from django.conf import settings
 from wsgiref.util import FileWrapper
+import datetime
+import mimetypes
 
 @login_required(login_url='members:user_login')
 def access_denied(request):
@@ -29,15 +31,18 @@ def studentdash(request):
     try:
         student_profile = StudentProfile.objects.get(user=request.user)
         subjects = Subjects.objects.all()
+        noticeb = Notice.objects.all()
     except StudentProfile.DoesNotExist or Subjects.DoesNotExist:
         student_profile = None  # Handle the case where the profile doesn't exist
         subjects = None
+        noticeb = None
 
     context = {
         'user': request.user,
         'student_profile': student_profile,
         'subjects': subjects,
         'current_page': 'dashboard',
+        'noticeb': noticeb
     }
     return render(request, 'Students/dash.html', context)
 
@@ -80,6 +85,20 @@ def download(request, id):
         print(f"Error serving file: {e}")  # For debugging
         raise Http404("Error accessing file")
 
+
+@role_required('is_student')
+@login_required
+def view_assignment(request, assignment_id):
+    assignment = get_object_or_404(Assignments, id=assignment_id)
+    file_path = assignment.file_name.path
+    content_type, _ = mimetypes.guess_type(file_path)
+
+    # For PDFs and common document types
+    response = HttpResponse(open(file_path, 'rb'), content_type=content_type)
+    response['Content-Disposition'] = f'inline; filename="{assignment.file_name.name}"'
+    return response
+
+
 ################################################################################
 ################################################################################
 ################################################################################
@@ -113,24 +132,27 @@ def teacherdash(request):
 @role_required('is_teacher')
 @login_required(login_url='members:user_login')
 def t_assignments(request):
+    current_date = datetime.datetime.now()
     if request.method == "POST":
         name = request.POST.get('title')
         due_date = request.POST.get('due_date')
         file = request.FILES.get('file')
         description = request.POST.get('description')
+        createDate = current_date
 
         new_assign = Assignments(
             name=name,
             description=description,
             due_date=due_date,
             file_name=file,
+            createDate=createDate,
         )
         new_assign.save()
             
         return redirect('core:teacher_assignments')
 
     assigns = Assignments.objects.all()
-    return render(request, 'Teachers/assignments.html', {'assigns': assigns})
+    return render(request, 'Teachers/assignments.html', {'assigns': assigns, 'current_date': current_date})
 
 
 @role_required('is_teacher')
