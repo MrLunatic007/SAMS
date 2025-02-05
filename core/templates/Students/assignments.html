@@ -87,7 +87,7 @@
                     <div class="assignment-file">File: {{assign.file_name}}</div>
                     <div class="assignmnet-creation-date">Creation Date: {{ assign.createDate }}</div>
                     <a href="{% url 'core:download' assign.id %}" class="downbtn">Download</a>
-                    <a href="{% url 'core:view_assignment' assign.id %}" class="downbtn" target="_blank">Open</a>
+                    <a href="{% url 'core:view_office_doc' assign.id %}" class="downbtn" target="_blank">Open</a>
                 </div>
             </div>
             {% endfor %}

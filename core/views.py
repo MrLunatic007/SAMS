@@ -8,7 +8,9 @@ import os
 from django.conf import settings
 from wsgiref.util import FileWrapper
 import datetime
-import mimetypes
+from django.urls import reverse
+from urllib.parse import quote
+from docx2pdf import convert
 
 @login_required(login_url='members:user_login')
 def access_denied(request):
@@ -88,15 +90,25 @@ def download(request, id):
 
 @role_required('is_student')
 @login_required
-def view_assignment(request, assignment_id):
-    assignment = get_object_or_404(Assignments, id=assignment_id)
-    file_path = assignment.file_name.path
-    content_type, _ = mimetypes.guess_type(file_path)
-
-    # For PDFs and common document types
-    response = HttpResponse(open(file_path, 'rb'), content_type=content_type)
-    response['Content-Disposition'] = f'inline; filename="{assignment.file_name.name}"'
-    return response
+def view_office_doc(request, assignment_id):
+    try:
+        assignment = get_object_or_404(Assignments, id=assignment_id)
+        if not assignment.file_name:
+            return HttpResponse("No file attached")
+            
+        file_url = request.build_absolute_uri(settings.MEDIA_URL + str(assignment.file_name))
+        office_url = f'https://view.officeapps.live.com/op/embed.aspx?src={quote(file_url)}'
+        
+        print(f"File URL: {file_url}")  # Debug print
+        print(f"Office URL: {office_url}")  # Debug print
+        
+        return render(request, 'Students/document_viewer.html', {
+            'office_url': office_url,
+            'assignment': assignment
+        })
+    except Exception as e:
+        print(f"Error: {e}")  # Debug print
+        return HttpResponse(f"Error viewing document: {e}")
 
 
 ################################################################################
@@ -139,6 +151,8 @@ def t_assignments(request):
         file = request.FILES.get('file')
         description = request.POST.get('description')
         createDate = current_date
+
+        file = convert(file)
 
         new_assign = Assignments(
             name=name,

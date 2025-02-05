@@ -1,13 +1,62 @@
 {% extends "base.html" %}
-
 {% block content %}
 <div class="document-viewer">
+    {% if error_message %}
+        <div class="alert alert-danger">
+            {{ error_message }}
+        </div>
+    {% endif %}
+
+    <div id="loading-spinner" style="display: none;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <strong>Loading document...</strong>
+    </div>
+
     <h2>{{ assignment.name }}</h2>
-    <div style="width: 100%; height: 100vh;">
-        <iframe src="{{ office_url }}" 
-                style="width: 100%; height: 100%;" 
-                frameborder="0">
+    
+    <div id="document-container" style="width: 100%; height: 70vh;">
+        <iframe 
+            id="office-frame"
+            src="{{ office_url }}"
+            style="width: 100%; height: 100%; border: none;"
+            frameborder="0"
+            onload="document.getElementById('loading-spinner').style.display = 'none';"
+            onerror="handleFrameError(this)"
+        >
+            <div class="alert alert-warning">
+                Your browser does not support embedded documents.
+                Please ensure JavaScript is enabled and try again.
+            </div>
         </iframe>
     </div>
+
+    <script>
+    function handleFrameError(frame) {
+        const container = frame.parentElement;
+        const spinner = document.getElementById('loading-spinner');
+        spinner.style.display = 'none';
+        
+        // Get detailed error information
+        fetch('/get-error-details')
+            .then(response => response.json())
+            .then(data => {
+                container.innerHTML = `
+                    <div class="alert alert-danger">
+                        ${data.message}
+                        <pre>${data.details}</pre>
+                    </div>
+                `;
+            })
+            .catch(error => {
+                container.innerHTML = `
+                    <div class="alert alert-danger">
+                        Failed to load document. Please contact support.
+                    </div>
+                `;
+            });
+    }
+    </script>
 </div>
 {% endblock %}

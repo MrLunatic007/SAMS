@@ -19,7 +19,7 @@ urlpatterns =[
     path('student/dashboard', views.studentdash, name="student_dash"),
     path("student/assignment", views.s_assignment, name="student_assignment"),
     path('student/assignment/download/<int:id>/', views.download, name='download'),
-    path('view-assignment/<int:assignment_id>/', views.view_assignment, name='view_assignment'),
+    path('view-office/<int:assignment_id>/', views.view_office_doc, name='view_office_doc'),
 
 
     ################################################################################
@@ -42,4 +42,4 @@ urlpatterns =[
 
     # access denied urls
     path('access/denied', views.access_denied, name="access_denied"),
-]
+] 
