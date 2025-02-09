@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Submitted Assignments</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Admission</th>
+            <th>Assignment</th>
+            <th>Submission Time</th>
+            <th>File</th>
+            <th>Answer Text</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for submission in submissions %}
+        <tr>
+            <td>{{ submission.student.user.get_full_name }}</td>
+            <td>{{ submission.student.student_id}}</td>
+            <td>{{ submission.assignment.title }}</td>
+            <td>{{ submission.submitted_at }}</td>
+            <td>
+                {% if submission.submission_file %}
+                <a href="{{ submission.submission_file.url }}" target="_blank">View File</a>
+                {% else %}
+                No file uploaded
+                {% endif %}
+            </td>
+            <td>{{ submission.answer_text|truncatewords:15 }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No submissions yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<style>
+    /* Styles for the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+td a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+/* Styling the headings */
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    table {
+        font-size: 0.9rem;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}
+
+</style>
+
+{% endblock %}

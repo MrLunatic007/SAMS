@@ -1,62 +1,157 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="document-viewer">
+<div class="assignment-container">
+    <div class="assignment-header">
+        <h2>{{ assignment.name }}</h2>
+        <div class="due-date">Due: {{ assignment.due_date }}</div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Upload File (optional)</label>
+                <input type="file" name="submission_file">
+            </div>
+            <button type="submit" class="submit-btn">Submit Assignment</button>
+        </form>
+    </div>
+
     {% if error_message %}
-        <div class="alert alert-danger">
-            {{ error_message }}
-        </div>
+    <div class="error-message">
+        <span class="error-icon">⚠️</span>
+        {{ error_message }}
+    </div>
     {% endif %}
 
-    <div id="loading-spinner" style="display: none;">
-        <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">Loading...</span>
+    <div class="viewer-container">
+        {% if viewer_url %}
+        <div class="document-frame">
+            <iframe
+                src="{{ viewer_url }}"
+                frameborder="0"
+                allowfullscreen
+            ></iframe>
         </div>
-        <strong>Loading document...</strong>
+        {% endif %}
     </div>
 
-    <h2>{{ assignment.name }}</h2>
-    
-    <div id="document-container" style="width: 100%; height: 70vh;">
-        <iframe 
-            id="office-frame"
-            src="{{ office_url }}"
-            style="width: 100%; height: 100%; border: none;"
-            frameborder="0"
-            onload="document.getElementById('loading-spinner').style.display = 'none';"
-            onerror="handleFrameError(this)"
-        >
-            <div class="alert alert-warning">
-                Your browser does not support embedded documents.
-                Please ensure JavaScript is enabled and try again.
-            </div>
-        </iframe>
-    </div>
-
-    <script>
-    function handleFrameError(frame) {
-        const container = frame.parentElement;
-        const spinner = document.getElementById('loading-spinner');
-        spinner.style.display = 'none';
+    <div class="submission-form">
+        <h3>Your Submission</h3>
         
-        // Get detailed error information
-        fetch('/get-error-details')
-            .then(response => response.json())
-            .then(data => {
-                container.innerHTML = `
-                    <div class="alert alert-danger">
-                        ${data.message}
-                        <pre>${data.details}</pre>
-                    </div>
-                `;
-            })
-            .catch(error => {
-                container.innerHTML = `
-                    <div class="alert alert-danger">
-                        Failed to load document. Please contact support.
-                    </div>
-                `;
-            });
-    }
-    </script>
+    </div>
 </div>
+
+<style>
+.assignment-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--color-white);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.assignment-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-light);
+}
+
+.assignment-header h2 {
+    color: var(--color-dark);
+    margin-bottom: 0.5rem;
+}
+
+.due-date {
+    color: var(--color-info);
+    font-size: 0.9rem;
+}
+
+.error-message {
+    background: var(--color-danger);
+    color: var(--color-white);
+    padding: 1rem;
+    border-radius: var(--border-radius-1);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.viewer-container {
+    margin: 2rem 0;
+    background: var(--color-light);
+    border-radius: var(--border-radius-1);
+    padding: 1rem;
+}
+
+.document-frame {
+    background: white;
+    border-radius: var(--border-radius-1);
+    overflow: hidden;
+}
+
+.document-frame iframe {
+    width: 100%;
+    height: 70vh;
+    border: none;
+}
+
+.submission-form {
+    background: var(--color-white);
+    padding: 2rem;
+    border-radius: var(--border-radius-1);
+    margin-top: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-dark);
+}
+
+textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 1rem;
+    border: 1px solid var(--color-light);
+    border-radius: var(--border-radius-1);
+    resize: vertical;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--color-light);
+    border-radius: var(--border-radius-1);
+}
+
+.submit-btn {
+    background: var(--color-primary);
+    color: var(--color-white);
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius-1);
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+
+.submit-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+@media screen and (max-width: 768px) {
+    .assignment-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+    
+    .document-frame iframe {
+        height: 50vh;
+    }
+}
+</style>
 {% endblock %}

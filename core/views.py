@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .permissions import role_required
 from members.models import StudentProfile, TeacherProfile, Subjects
-from .models import Notice, Assignments
+from .models import Notice, Assignments, AssignmentSubmission
 from django.http import FileResponse, Http404, HttpResponse
 import os
 from django.conf import settings
@@ -10,7 +10,7 @@ from wsgiref.util import FileWrapper
 import datetime
 from django.urls import reverse
 from urllib.parse import quote
-from docx2pdf import convert
+
 
 @login_required(login_url='members:user_login')
 def access_denied(request):
@@ -52,8 +52,14 @@ def studentdash(request):
 @login_required(login_url='members:user_login')
 def s_assignment(request):
     assigns = Assignments.objects.all()
-    return render(request, 'Students/assignments.html', {'assigns': assigns})
-
+    submissions = {
+        sub.assignment_id: sub 
+        for sub in AssignmentSubmission.objects.filter(student__user=request.user)
+    }
+    return render(request, 'Students/assignments.html', {
+        'assigns': assigns,
+        'submissions': submissions
+    })
 
 @role_required('is_student')
 @login_required(login_url='members:user_login')  # Fixed typo in URL
@@ -89,27 +95,38 @@ def download(request, id):
 
 
 @role_required('is_student')
-@login_required
-def view_office_doc(request, assignment_id):
-    try:
-        assignment = get_object_or_404(Assignments, id=assignment_id)
-        if not assignment.file_name:
-            return HttpResponse("No file attached")
-            
-        file_url = request.build_absolute_uri(settings.MEDIA_URL + str(assignment.file_name))
-        office_url = f'https://view.officeapps.live.com/op/embed.aspx?src={quote(file_url)}'
+@login_required(login_url='members:user_login')
+def view_assignment(request, assignment_id):
+    assignment = get_object_or_404(Assignments, id=assignment_id)
+    submission = AssignmentSubmission.objects.filter(
+        student__user=request.user,
+        assignment=assignment
+    ).first()
+    
+    if request.method == 'POST':
+        submission_file = request.FILES.get('submission_file')
+        submission_text = request.POST.get('submission_text')
         
-        print(f"File URL: {file_url}")  # Debug print
-        print(f"Office URL: {office_url}")  # Debug print
+        if submission:
+            submission.submission_file = submission_file
+            submission.submission_text = submission_text
+            submission.status = 'submitted'
+            submission.save()
+        else:
+            submission = AssignmentSubmission.objects.create(
+                student=request.user.studentprofile ,
+                assignment=assignment,
+                submission_file=submission_file,
+                answer_text=submission_text,
+                status='submitted'
+            )
         
-        return render(request, 'Students/document_viewer.html', {
-            'office_url': office_url,
-            'assignment': assignment
-        })
-    except Exception as e:
-        print(f"Error: {e}")  # Debug print
-        return HttpResponse(f"Error viewing document: {e}")
-
+        return redirect('core:student_assignment')
+    
+    return render(request, 'Students/document_viewer.html', {
+        'assignment': assignment,
+        'submission': submission
+    })
 
 ################################################################################
 ################################################################################
@@ -152,7 +169,6 @@ def t_assignments(request):
         description = request.POST.get('description')
         createDate = current_date
 
-        file = convert(file)
 
         new_assign = Assignments(
             name=name,
@@ -191,6 +207,16 @@ def notice(request):
     # If GET request, display existing notices
     noticeb = Notice.objects.all()
     return render(request, 'Teachers/notice.html', {'noticeb': noticeb})
+
+@role_required('is_teacher')
+@login_required(login_url='members:user_login')
+def teacher_view_submissions(request):
+    submissions = AssignmentSubmission.objects.select_related('student', 'assignment').filter(status='submitted').order_by('-submitted_at')
+    
+    return render(request, 'Teachers/view_submissions.html', {
+        'submissions': submissions
+    })
+
 
 @role_required('is_teacher')
 @login_required(login_url='members:user_login')

@@ -19,7 +19,7 @@ urlpatterns =[
     path('student/dashboard', views.studentdash, name="student_dash"),
     path("student/assignment", views.s_assignment, name="student_assignment"),
     path('student/assignment/download/<int:id>/', views.download, name='download'),
-    path('view-office/<int:assignment_id>/', views.view_office_doc, name='view_office_doc'),
+    path('view-office/<int:assignment_id>/', views.view_assignment, name='view_office_doc'),
 
 
     ################################################################################
@@ -38,8 +38,10 @@ urlpatterns =[
     path('teacher/noticeboard', views.notice, name='notice'),
     path('teacher/assignments/delete/<int:id>', views.assign_delete, name='t_delete'), 
     path('teacher/noticeboard/delete/<int:id>', views.notice_delete, name='t_n_delete'), 
+    path('teacher/submissions/', views.teacher_view_submissions, name='teacher_view_submissions'),
 
 
     # access denied urls
     path('access/denied', views.access_denied, name="access_denied"),
+    # path('ckeditor/', include('ckeditor_uploader.urls')),
 ] 

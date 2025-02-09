@@ -28,6 +28,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'members',
+    # 'editor',  # Your app
+    # 'ckeditor',  # WYSIWYG editor
+    # 'ckeditor_uploader',  # For file uploads
 ]
 
 MIDDLEWARE = [
