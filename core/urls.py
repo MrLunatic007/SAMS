@@ -19,7 +19,7 @@ urlpatterns =[
     path('student/dashboard', views.studentdash, name="student_dash"),
     path("student/assignment", views.s_assignment, name="student_assignment"),
     path('student/assignment/download/<int:id>/', views.download, name='download'),
-    path('view-office/<int:assignment_id>/', views.view_assignment, name='view_office_doc'),
+    path('view-assignment/<int:assignment_id>/', views.view_assignment, name='view_assignment'),
 
 
     ################################################################################
@@ -41,7 +41,19 @@ urlpatterns =[
     path('teacher/submissions/', views.teacher_view_submissions, name='teacher_view_submissions'),
 
 
+    ################################################################################
+    ################################################################################
+    ################################################################################
+    ############################Parent Urls#########################################
+    ################################################################################
+    ################################################################################
+    ################################################################################
+    ################################################################################
+    ################################################################################
+
+    path('parent/dashboard', views.parent_dash, name='parent_dash'),
+    path('parent/student-progress', views.parent_studentProgress, name='parent_studentProgress'),
+
     # access denied urls
     path('access/denied', views.access_denied, name="access_denied"),
-    # path('ckeditor/', include('ckeditor_uploader.urls')),
 ] 

@@ -21,18 +21,13 @@
                         {% if student_profile %}
                             <small class="text-muted">ADM: {{ student_profile.student_id }}</small>
                         {% else %}
-                            <small class="text-muted">No ID detected</small>
+                            <small class="text-muted">ADM: No ID detected</small>
                         {% endif %}
                     </div>
                 </div>
                 <div class="about">
-                    <h5>Subjects</h5>
-                    <p>{% for subject in subjects %}
-                            <li>{{subject.name}}</li>
-                        {% empty %}
-                            <li>No subjects</li>
-                        {% endfor %}
-                    </p>
+                    <h5>Class</h5>
+                    <p>{{ student_profile.class_name }}</p>
                     <h5>DOB</h5>
                     <p>{{ user.date_of_birth }}</p>
                     <h5>Guardian Contact</h5>
@@ -45,9 +40,18 @@
         
 
         <main>
+            {% if messages %}
+            {%for message in messages%}
+            <div class="error-message">
+                <span class="error-icon">✅</span>
+                {{ message }}
+            </div>
+            {% endfor %}
+            
+            {% endif %}
             <h1>Studying Subjects</h1>
             <div class="subjects">
-                {% for subject in subjects %}
+                {% for subject in study_profile %}
                     <div class="eg">
                         <h3>{{subject.name}}</h3>
                     </div>

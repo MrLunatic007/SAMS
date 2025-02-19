@@ -6,6 +6,7 @@ class CustomUser(AbstractUser):
     is_teacher = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
+    is_parent = models.BooleanField(default=False)
     date_of_birth = models.CharField(max_length=50, blank=True, null=True)
 
 class Subjects(models.Model):
@@ -30,7 +31,7 @@ class Subjects(models.Model):
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    student_id = models.CharField(max_length=50)
+    student_id = models.CharField(max_length=50, primary_key=True)
     class_name = models.CharField(max_length=50)
     guardian_contact = models.CharField(max_length=50)
     subjects = models.ManyToManyField(Subjects, related_name='students')
@@ -41,8 +42,17 @@ class StudentProfile(models.Model):
 
 class TeacherProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    teacher_id = models.CharField(max_length=50)
+    teacher_id = models.CharField(max_length=50, primary_key=True)
     subjects_taught = models.ManyToManyField(Subjects, related_name='teachers')
 
     def __str__(self):
         return f"Teacher: {self.user.username} (ID: {self.teacher_id})"
+    
+class ParentProfile(models.Model):
+    students_adm = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name='parents')
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=20)
+    parent_id = models.CharField(max_length=100, primary_key=True)
+    
+    def __str__(self):
+        return f"Parent Name: {self.user.username} (ID: {self.parent_id})"

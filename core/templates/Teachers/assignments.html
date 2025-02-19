@@ -5,141 +5,141 @@
     <head>
         {% block title %}Teacher Assignments{% endblock title %}
     </head>
-    {% block extra_css %}
+    {% block extra_css %}    
+    /* Default Styles - Desktop First */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
 
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f0f0f0;
-    }
+.notice-form-container {
+    width: 50%;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    background-color: blueviolet;
+    border-radius: 8px;
+    
+}
 
+.notice-form-container input,
+.notice-form-container select,
+.notice-form-container textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: black;
+}
+
+.assignment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+
+.assignment-card {
+    width: 90%;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.assignment-card:hover {
+    transform: translateY(-5px);
+}
+
+.AssignBtn {
+    all: unset;
+    padding: 0.5rem;
+    border: 1px solid black;
+    border-bottom: 3px solid black;
+    border-right: 3px solid black;
+    margin-left: 2rem;
+}
+
+.AssignBtn:hover {
+    background: grey;
+}
+
+.submit-btn {
+    padding: 1.5rem;
+    color: black;
+    border-radius: 2rem;
+    margin-top: 2rem;
+}
+
+.delbtn {
+    color: red;
+    text-decoration: none;
+    border: 1px solid red;
+    padding: 0.5rem;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+    display: flex;
+    justify-content: right;
+    width: 4rem;
+}
+
+.delbtn:hover {
+    background: red;
+    color: white;
+}
+
+/* Tablets (768px - 1024px) */
+@media screen and (max-width: 1024px) {
     .notice-form-container {
-        width: 50%; /* Adjust the width as per your preference */
-        margin: 2rem auto; /* Center horizontally and add margin at the top */
-        padding: 2rem;
-        border: 1px solid #ddd;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-        background-color: white;
-        border-radius: 8px;
-    }
-    
-    .notice-form-container h2 {
-        margin-bottom: 1rem;
-        font-size: 1.5rem;
-        color: #333;
-    }
-    
-    .notice-form-container .form-group {
-        margin-bottom: 1rem;
-    }
-    
-    .notice-form-container label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: bold;
-        color: #333;
-    }
-    
-    .notice-form-container input,
-    .notice-form-container select,
-    .notice-form-container textarea {
-        width: 100%;
-        padding: 0.8rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1rem;
-    }
-    
-    .notice-form-container textarea {
-        height: 100px;
-    }
-    
-    .notice-form-container .submit-btn {
-        all: unset;
-        padding: 0.8rem 1.5rem;
-        background-color: black;
-        color: white;
-        text-align: center;
-        cursor: pointer;
-        border-radius: 4px;
-        margin-top: 1rem;
-        display: inline-block;
-        text-transform: uppercase;
-    }
-    
-    .notice-form-container .submit-btn:hover {
-        background-color: grey;
-    }
-
-    .assignment-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 2rem;
+        width: 70%;
     }
 
     .assignment-card {
-        width: 90rem;
-        background-color: white;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin-bottom: 2rem;
-        transition: transform 0.3s ease;
+        width: 95%;
     }
+}
 
-    .assignment-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .assignment-content {
+/* Mobile Devices (Below 768px) */
+@media screen and (max-width: 768px) {
+    .notice-form-container {
+        width: 90%;
         padding: 1.5rem;
     }
 
-    .assignment-title {
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-    }
-
-    .assignment-description {
-        font-size: 1rem;
-        color: #666;
+    .assignment-card {
+        width: 100%;
     }
 
     .AssignBtn {
-        all: unset;
-        padding: 0.5rem;
-        border: 1px solid black;
-        border-bottom: 3px solid black;
-        border-right: 3px solid black;
-        margin-left: 2rem;
+        width: 100%;
+        text-align: center;
+        margin: 0.5rem 0;
+    }
+}
+
+/* Small Phones (Below 480px) */
+@media screen and (max-width: 480px) {
+    .notice-form-container {
+        width: 95%;
     }
 
-    .AssignBtn:hover {
-        background: grey;
+    .assignment-title {
+        font-size: 1rem;
     }
 
-    .delbtn {
-        color: red;
-        text-decoration: none;
-        border: 1px solid red;
-        padding: 0.5rem;
-        border-radius: 5px;
-        transition: background 0.3s ease;
-        display: flex;
-        justify-content; right;
-        width: 4rem;
+    .assignment-description {
+        font-size: 0.9rem;
     }
-    
-    .delbtn:hover {
-        background: red;
-        color: white;
-    }
-    
+}
+
 
     {% endblock extra_css %}
 

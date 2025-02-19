@@ -14,11 +14,11 @@
             <div class="profile">
                 <div class="top">
                     <div class="info">
-                        <p>Hey, <b>{{ user.get_full_name }}</b></p>
+                        <p>NAME: <b>{{ user.get_full_name }}</b></p>
                         {% if teacher_profile %}
-                            <small class="text-muted">{{ teacher_profile.teacher_id }}</small>
+                            <small class="text-muted">TSC No: {{ teacher_profile.teacher_id }}</small>
                         {% else %}
-                            <small class="text-muted">No Student ID</small>
+                            <small class="text-muted">No Teacher ID</small>
                         {% endif %}
                     </div>
                 </div>
@@ -55,6 +55,13 @@
         
 
         <main>
+            {% if error_message %}
+            <div class="error-message">
+                <span class="error-icon">✅</span>
+                {{ error_message }}
+            </div>
+            
+            {% endif %}
             <h1>Teaching Subjects</h1>
             <div class="subjects">
                 {% if subjects_taught %}

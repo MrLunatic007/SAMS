@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, StudentProfile, TeacherProfile, Subjects
+from .models import CustomUser, StudentProfile, TeacherProfile, Subjects, ParentProfile
 
 # Register the Subject model
 @admin.register(Subjects)
@@ -17,6 +17,7 @@ class CustomUserAdmin(UserAdmin):
                 'is_teacher',
                 'is_student',
                 'is_admin',
+                'is_parent',
             ),
         }),
     )
@@ -28,6 +29,7 @@ class CustomUserAdmin(UserAdmin):
                 'is_teacher',
                 'is_student',
                 'is_admin',
+                'is_parent',
             ),
         }),
     )
@@ -51,3 +53,7 @@ class TeacherProfileAdmin(admin.ModelAdmin):
     def display_subjects_taught(self, obj):
         return ", ".join(subject.name for subject in obj.subjects_taught.all())
     display_subjects_taught.short_description = "Subjects Taught"
+
+@admin.register(ParentProfile)
+class ParentProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'parent_id', 'phone_number')    

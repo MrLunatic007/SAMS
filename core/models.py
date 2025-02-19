@@ -19,7 +19,7 @@ def assignment_directory_path(instance, filename):
 class Assignments(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=150)
-    due_date = models.DateField(auto_now=False, auto_now_add=False)
+    due_date = models.DateField(default=timezone.now)
     file_name = models.FileField(upload_to='assignments/', max_length=100)
     createDate=models.DateField(max_length=100, null=True)
 
@@ -49,8 +49,6 @@ class AssignmentSubmission(models.Model):
     class Meta:
         unique_together = ['student', 'assignment']
         ordering = ['-submitted_at']
-
-    from django.utils import timezone
 
 def save(self, *args, **kwargs):
     if self.status == 'submitted':

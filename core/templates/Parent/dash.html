@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block title %}Parent Dashboard{% endblock title %}
+</head>
+<body>
+
+    {% block content %}
+   
+    <div class="container">
+        <aside>
+            <!--Profile Done-->
+            <div class="profile">
+                <div class="top">
+                    <div class="info">
+                        <p>Name: <b>{{ user.get_full_name }}</b></p>
+                        {% if parent_profile %}
+                            <small class="text-muted">ID number: {{ parent_profile.parent_id }}</small>
+                        {% else %}
+                            <small class="text-muted">ID number: No ID detected</small>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="about">
+                    <h5>Phone Number</h5>
+                    <p>{{ parent_profile.phone_number }}</p>
+                    <h5>DOB</h5>
+                    <p>{{ user.date_of_birth }}</p>
+                    <h5>Student Admission</h5>
+                    <p>{{ students_profile.student_adm }}</p>
+                    <h5>Parent Email</h5>
+                    <p>{{ user.email }}</p>
+                </div>
+            </div>
+        </aside>
+        
+
+        <main>
+            {% if messages %}
+            {%for message in messages%}
+            <div class="error-message">
+                <span class="error-icon">✅</span>
+                {{ message }}
+            </div>
+            {% endfor %}
+            
+            {% endif %}
+            <h1>Student's Doing Subjects</h1>
+            <div class="subjects">
+                {% for subject in study_profile %}
+                    <div class="eg">
+                        <h3>{{subject.name}}</h3>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </main>
+
+        <div class="right">
+            <h2>NoticeBoard</h2>
+            <div class="announcements">
+                {% if noticeb %}
+                <div class="updates">
+                {% for notice in noticeb %}
+                    <div class="message">
+                        <h4 style="font-size: 1rem;">{{notice.name}}</h4>
+                        <p style="font-size: 0,6rem;">{{notice.description}}</p>
+                        <small class="text-muted">Importance: <b style="color: red;">{{notice.importance}}<b></small>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <small class="text-muted">No Notices</small>
+                {% endif %}
+            </div>
+            </div>
+
+        </div>
+    </div>
+    {% endblock content %}
+</body>
+</html>

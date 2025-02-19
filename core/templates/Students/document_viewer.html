@@ -1,9 +1,17 @@
 {% extends "base.html" %}
+
+<head>
+    {% block title %}Student Assignment: {{assignment.name}}{% endblock title %}
+</head>
 {% block content %}
 <div class="assignment-container">
+    <div class="submission-form">
+            <h3>Your Submission</h3>
+    </div>
     <div class="assignment-header">
         <h2>{{ assignment.name }}</h2>
         <div class="due-date">Due: {{ assignment.due_date }}</div>
+
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
@@ -14,45 +22,38 @@
         </form>
     </div>
 
-    {% if error_message %}
-    <div class="error-message">
-        <span class="error-icon">⚠️</span>
-        {{ error_message }}
-    </div>
-    {% endif %}
-
-    <div class="viewer-container">
-        {% if viewer_url %}
-        <div class="document-frame">
-            <iframe
-                src="{{ viewer_url }}"
-                frameborder="0"
-                allowfullscreen
-            ></iframe>
+    {% if messages %}
+    {% for message in messages %}
+        <div class="error-message">
+            <span class="error-icon">⚠️</span>
+            {{ message }}
         </div>
-        {% endif %}
-    </div>
+    {% endfor %}
+{% endif %}
 
-    <div class="submission-form">
-        <h3>Your Submission</h3>
-        
-    </div>
+    
 </div>
 
-<style>
+
+{% endblock %}
+{% block extra_css %}
 .assignment-container {
     max-width: 1200px;
     margin: 2rem auto;
-    padding: 2rem;
     background: var(--color-white);
     border-radius: var(--card-border-radius);
     box-shadow: var(--box-shadow);
+    position: absolute;
+    left:55rem;
+    padding: 5rem;
+    top: 6rem;
 }
 
 .assignment-header {
     margin-bottom: 2rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--color-light);
+    font-size: 1.5rem;
 }
 
 .assignment-header h2 {
@@ -62,7 +63,6 @@
 
 .due-date {
     color: var(--color-info);
-    font-size: 0.9rem;
 }
 
 .error-message {
@@ -74,25 +74,8 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-}
+    font-size: 1.5rem;
 
-.viewer-container {
-    margin: 2rem 0;
-    background: var(--color-light);
-    border-radius: var(--border-radius-1);
-    padding: 1rem;
-}
-
-.document-frame {
-    background: white;
-    border-radius: var(--border-radius-1);
-    overflow: hidden;
-}
-
-.document-frame iframe {
-    width: 100%;
-    height: 70vh;
-    border: none;
 }
 
 .submission-form {
@@ -100,6 +83,7 @@
     padding: 2rem;
     border-radius: var(--border-radius-1);
     margin-top: 2rem;
+    font-size: 1.5rem;
 }
 
 .form-group {
@@ -126,6 +110,11 @@ input[type="file"] {
     padding: 0.5rem;
     border: 1px solid var(--color-light);
     border-radius: var(--border-radius-1);
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .submit-btn {
@@ -143,15 +132,67 @@ input[type="file"] {
     transform: translateY(-2px);
 }
 
-@media screen and (max-width: 768px) {
+/* Large Screens (1200px and up) */
+@media screen and (min-width: 1200px) {
     .assignment-container {
-        margin: 1rem;
-        padding: 1rem;
-    }
-    
-    .document-frame iframe {
-        height: 50vh;
+        max-width: 1200px;
+        padding: 5rem;
+        left: 55rem;
     }
 }
-</style>
-{% endblock %}
+
+/* Medium Screens (992px to 1199px) */
+@media screen and (max-width: 1199px) {
+    .assignment-container {
+        left: 40rem;
+        padding: 4rem;
+    }
+}
+
+/* Tablets (768px to 991px) */
+@media screen and (max-width: 991px) {
+    .assignment-container {
+        position: relative;
+        left: auto;
+        margin: 2rem auto;
+        padding: 3rem;
+    }
+    
+    .submission-form {
+        padding: 1.5rem;
+    }
+    
+    .assignment-header {
+        font-size: 1.3rem;
+    }
+}
+
+/* Mobile (767px and below) */
+@media screen and (max-width: 767px) {
+    .assignment-container {
+        margin: 1rem;
+        padding: 1.5rem;
+        top: 3rem;
+    }
+    
+    .error-message {
+        font-size: 1.2rem;
+        padding: 0.8rem;
+    }
+    
+    .submission-form {
+        padding: 1rem;
+        font-size: 1.3rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .submit-btn {
+        width: 100%;
+        padding: 0.6rem 1.2rem;
+    }
+}
+
+{% endblock extra_css %}

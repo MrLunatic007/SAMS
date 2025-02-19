@@ -11,7 +11,6 @@
             <th>Assignment</th>
             <th>Submission Time</th>
             <th>File</th>
-            <th>Answer Text</th>
         </tr>
     </thead>
     <tbody>
@@ -19,7 +18,7 @@
         <tr>
             <td>{{ submission.student.user.get_full_name }}</td>
             <td>{{ submission.student.student_id}}</td>
-            <td>{{ submission.assignment.title }}</td>
+            <td>{{ submission.assignment.name }}</td>
             <td>{{ submission.submitted_at }}</td>
             <td>
                 {% if submission.submission_file %}
@@ -28,7 +27,6 @@
                 No file uploaded
                 {% endif %}
             </td>
-            <td>{{ submission.answer_text|truncatewords:15 }}</td>
         </tr>
         {% empty %}
         <tr>
@@ -87,6 +85,86 @@ h2 {
 
     th, td {
         padding: 8px;
+    }
+}
+
+/* Default Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+td a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+/* Styling the headings */
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    table {
+        font-size: 0.9rem;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    table {
+        font-size: 0.85rem;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Small Phones (Below 480px) */
+@media screen and (max-width: 480px) {
+    table {
+        font-size: 0.8rem;
+    }
+
+    th, td {
+        padding: 5px;
+    }
+
+    h2 {
+        font-size: 1.3rem;
     }
 }
 

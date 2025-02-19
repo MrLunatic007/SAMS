@@ -1,0 +1,93 @@
+:root {
+    --bg-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    --text-color: #fff;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-gradient);
+}
+
+main {
+    position: relative;
+    margin-top: 1.4rem;
+}
+
+.container {
+    position: relative;
+    display: grid;
+    width: 93%;
+    margin: 3rem;
+    gap: 1.8rem;
+    grid-template-columns: 20rem 20rem 20rem;
+    padding-top: 4rem;
+}
+
+main .wrapper {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2  rem;
+    padding: 2rem;
+    width: 20rem;
+}
+
+main .selection-card {
+    border: 1px solid whitesmoke;
+    border-radius: 2rem;
+    padding: 5rem;
+    color: var(--text-color);
+    text-align: center;
+    margin: 0 auto;
+    width: 10rem;
+}
+
+.selection-card a {
+    text-decoration: none;
+}
+
+.selection-card .call-to-action-btn {
+    all: unset;
+    text-decoration: none;
+    border: 2px solid whitesmoke;
+    padding: 1rem;
+    width: 5rem;
+    border-radius: 2rem;
+    color: var(--text-color);
+    background: #3b82f6;
+    transition: .3s;
+}
+
+.call-to-action-btn:hover{
+    background: #8b5cf6;
+    font-size: larger;
+    padding: 1.5rem;
+    width: 6rem;
+}
+
+/* Mobile Devices (Below 768px) */
+@media screen and (max-width: 768px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 93%;
+        margin: 3rem;
+        gap: 1.8rem;
+        padding-top: 4rem;
+    }
+}
+
+/* Small Phones (Below 480px) */
+@media screen and (max-width: 480px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 93%;
+        margin: 3rem;
+        gap: 1.8rem;
+        padding-top: 4rem;
+    }
+}
