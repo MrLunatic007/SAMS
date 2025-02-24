@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.urls import reverse
 
 def index(request):
-    return render(request, 'Landing.html')
+    return render(request, 'Land.html')
 
 def selection(request):
     return render(request, 'selection.html')
