@@ -96,3 +96,6 @@ def parent_login_user(request):
 def user_logout(request):
     logout(request)
     return redirect('members:index')
+
+def CommingSoon(request):
+    return render(request, 'CommingSoon.html')

@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     
     <!--====== Title ======-->
-    <title>Simple - Bootstrap 5 Website Template</title>
+    <title>Weithaga Boys High School</title>
     
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,7 +16,7 @@
     <link rel="shortcut icon" href="{% static 'media/img/' %}" type="image/png">
         
     <!--====== Animate CSS ======-->
-    <link rel="stylesheet" href="{% statuc 'css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
         
     <!--====== Glide CSS ======-->
     <link rel="stylesheet" href="{% static 'css/tiny-slider.css' %}">
@@ -70,13 +70,9 @@
                     <div class="col-lg-12">
                         <nav class="navbar navbar-expand-lg">
                             <a class="navbar-brand" href="{% url 'members:index'%}">
-                                <img id="logo" src="{% static 'media/img/' %}" alt="Logo">
+                                WEBZ
                             </a>
-                            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="toggler-icon"></span>
-                                <span class="toggler-icon"></span>
-                                <span class="toggler-icon"></span>
-                            </button>
+                            
 
                             <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                 <ul id="nav" class="navbar-nav ms-auto">
@@ -84,22 +80,25 @@
                                         <a class="page-scroll active" href="#home">Home</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="page-scroll" href="#about">About</a>
+                                        <a class="page-scroll" href="#about">About Our School</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="page-scroll" href="#services">Services</a>
+                                        <a class="page-scroll" href="#services">Core Values</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="page-scroll" href="#portfolio">Gallery</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="page-scroll" href="#team">Team</a>
+                                        <a class="page-scroll" href="#team">Our Staff</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="page-scroll" href="#blog">Blog</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="page-scroll" href="#contact">Contact</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="page-scroll" href="{% url 'members:selection' %}">Login</a>
                                     </li>
                                 </ul>
                             </div> <!-- navbar collapse -->
@@ -115,9 +114,10 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-8 col-md-10">
                             <div class="hero_content text-center">
-                                <h2 class="hero_title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">Simple Bootstrap 5</br> Website Template</h2>
-                                <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">A super simple website template based on Bootstrap 5 and HTML5, comes with all essential <br class="d-none d-xl-block"> elements & features to get started and ready to use for almost any type of business websites.</p>
-                                <a href="#features" class="main-btn wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.8s">Explore</a>
+                                <h2 class="hero_title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">WEITHAGA BOYS</br>HIGH SCHOOL</h2>
+                                <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">MOTTO<br class="d-none d-xl-block"> A pinnacle of academic excelence</p>
+                                <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">SLOGAN<br class="d-none d-xl-block"> THE DREAM TEAM</p>
+                                <a href="#features" class="main-btn wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.8s">Apply Now</a>
                             </div> <!-- hero content -->
                         </div>
                     </div> <!-- row -->
@@ -136,8 +136,9 @@
                 <div class="col-lg-6">
                     <div class="section_title text-center pb-25">
                         <h4 class="title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">Why Choose Us</h4>
-                        <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">Lorem ipsum dolor sit
-                            amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore.</p>
+                        <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
+                            We Strive to inculcate values, virtues and skills in our young gentlemen, and produce a holistic responsible and self reliant individual. 
+                        </p>
                     </div> <!-- section title -->
                 </div>
             </div> <!-- row -->
@@ -146,24 +147,24 @@
                     <div class="single_features text-center mt-30 wow fadeInUp" data-wow-duration="1.3s"
                         data-wow-delay="0.2s">
                         <i class="lni lni-layers"></i>
-                        <h4 class="features_title">Bootstrap 5 Based</a></h4>
-                        <p>Lorem ipsum dolor sit amet, sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore magna .</p>
+                        <h4 class="features_title">Our Vision</a></h4>
+                        <p>To be a pinnacle of academic excelence</p>
                     </div> <!-- single features -->
                 </div>
                 <div class="col-lg-4 col-md-7">
                     <div class="single_features text-center mt-30 wow fadeInUp" data-wow-duration="1.3s"
                         data-wow-delay="0.4s">
                         <i class="lni lni-layout"></i>
-                        <h4 class="features_title">Clean Design</a></h4>
-                        <p>Lorem ipsum dolor sit amet, sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore magna .</p>
+                        <h4 class="features_title">Our mission</a></h4>
+                        <p>To inculcate values, virtues and skills in order to produce a holistic, responsible and self reliant individual.</p>
                     </div> <!-- single features -->
                 </div>
                 <div class="col-lg-4 col-md-7">
                     <div class="single_features text-center mt-30 wow fadeInUp" data-wow-duration="1.3s"
                         data-wow-delay="0.6s">
                         <i class="lni lni-bolt"></i>
-                        <h4 class="features_title">Cutting-edge Features</a></h4>
-                        <p>Lorem ipsum dolor sit amet, sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore magna .</p>
+                        <h4 class="features_title">Our Motto</a></h4>
+                        <p>Education for Life</p>
                     </div> <!-- single features -->
                 </div>
             </div> <!-- row -->
@@ -182,15 +183,20 @@
                         <div class="about_content pt-120 pb-130">
                             <div class="section_title pb">
                                 <h4 class="title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">About Our
-                                    Creative Proccess</h4>
-                                <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">Lorem ipsum dolor
-                                    sit amet, consetetur sadipscing elitr, sed dianonumy eirmod tempor invidunt ut
-                                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-                                    dolores et erebum</p>
-                                <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.6s">Lorem ipsum dolor
-                                    sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                                    ut labore etdolore maali quyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-                                    dolores</p>
+                                    School</h4>
+                                <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
+                                    Weithaga Boys High School is a fully Boarding A.C.K. Sponsored public secondary school.
+                                    It is located in Weithaga location, Wangu Division of Kahuro District in Murang'a county. It 
+                                    was started in 1965 as a Day Harambee Secondary School to cater for the surrounding primary schools. 
+                                    Later, it was to serve the whole district as a fully boarding boys school. From an initial enrolment of 
+                                    only 37 students at its inception, The school has grouwn to a population of 1149 students currently.
+                                </p>
+                                <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.6s">
+                                    The teaching staff currently 39 T.S.C and 6 B.O.M teachers. Over the years, The parents, local community
+                                    and friends of the school have been pulling resources together to cater for the ever-growing population of 
+                                    students. Due to the free primary and population growth in our country, the transition rate from primary to
+                                    secondary has gone up. The school catchment area is high.
+                                </p>
                             </div> <!-- section title -->
                             <a href="#0" class="main-btn wow fadeInUp" data-wow-duration="1.3s"
                                 data-wow-delay="0.7s">Learn More</a>
@@ -202,7 +208,7 @@
             <div class="about_image bg_cover wow fadeInLeft" data-wow-duration="1.3s" data-wow-delay="0.2s"
                 style="background-image: url('{% static 'media/img/' %}')">
                 <div class="image_content">
-                    <h4 class="experience"><span>5</span> Years of Experience</h4>
+                    <h4 class="experience"><span>60</span> Years of Exelence</h4>
                 </div>
             </div> <!-- about image -->
         </div>
@@ -217,9 +223,10 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6">
                     <div class="section_title text-center pb-25">
-                        <h4 class="title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">Our Services</h4>
-                        <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">Lorem ipsum dolor sit
-                            amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore.</p>
+                        <h4 class="title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">Core Values</h4>
+                        <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
+                            These are the values we inculcate into our students
+                        </p>
                     </div> <!-- section title -->
                 </div>
             </div> <!-- row -->
@@ -227,49 +234,81 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="single_features text-center mt-60 wow fadeInUp" data-wow-duration="1.3s"
                         data-wow-delay="0.2s">
-                        <i class="lni lni-briefcase"></i>
-                        <h4 class="features_title">Digital Business</h4>
-                        <p>Lorem ipsum dolor sit amet, sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore magna .</p>
+                        <i class="lni lni-clipboard"></i>
+                        <h4 class="features_title">Responsibility</h4>
+                        <p>We teach our students to be responsible young individuals.</p>
                     </div> <!-- single features -->
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="single_features text-center mt-60 wow fadeInUp" data-wow-duration="1.3s"
                         data-wow-delay="0.3s">
-                        <i class="lni lni-clipboard"></i>
-                        <h4 class="features_title">Startup Business</h4>
-                        <p>Lorem ipsum dolor sit amet, sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore magna .</p>
+                        <i class="lni lni-lock"></i>
+                        <h4 class="features_title">Comitment</h4>
+                        <p>Our school has one of the most committed teachers in the country to ensure that your son has the best quality education in the country.</p>
                     </div> <!-- single features -->
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="single_features text-center mt-60 wow fadeInUp" data-wow-duration="1.3s"
                         data-wow-delay="0.4s">
-                        <i class="lni lni-target-revenue"></i>
-                        <h4 class="features_title">Business Investment</h4>
-                        <p>Lorem ipsum dolor sit amet, sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore magna .</p>
+                        <i class="lni lni-shield-alt"></i>
+                        <h4 class="features_title">Integrity</h4>
+                        <p>As a study institution we tend to keep the students' information integral.</p>
                     </div> <!-- single features -->
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="single_features text-center mt-60 wow fadeInUp" data-wow-duration="1.3s"
                         data-wow-delay="0.2s">
-                        <i class="lni lni-invention"></i>
-                        <h4 class="features_title">Business Solutions</h4>
-                        <p>Lorem ipsum dolor sit amet, sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore magna .</p>
+                        <i class="lni lni-star"></i>
+                        <h4 class="features_title">Loyalty</h4>
+                        <p>Our teachers are one of the most loyal teachers in the country in their profession.</p>
                     </div> <!-- single features -->
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="single_features text-center mt-60 wow fadeInUp" data-wow-duration="1.3s"
                         data-wow-delay="0.3s">
-                        <i class="lni lni-bar-chart"></i>
-                        <h4 class="features_title">Business Analysis</h4>
-                        <p>Lorem ipsum dolor sit amet, sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore magna .</p>
+                        <i class="lni lni-handshake"></i>
+                        <h4 class="features_title">Honesty</h4>
+                        <p>We teach our students to be honest and we prioritize on honesty during examinations.</p>
                     </div> <!-- single features -->
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="single_features text-center mt-60 wow fadeInUp" data-wow-duration="1.3s"
                         data-wow-delay="0.4s">
-                        <i class="lni lni-calendar"></i>
-                        <h4 class="features_title">Consulting Business</h4>
-                        <p>Lorem ipsum dolor sit amet, sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore magna .</p>
+                        <i class="lni lni-briefcase"></i>
+                        <h4 class="features_title">Professionalism</h4>
+                        <p>Our teachers are qualified with University certificates to ensure the at most excelence in the learning of the students.</p>
+                    </div> <!-- single features -->
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_features text-center mt-60 wow fadeInUp" data-wow-duration="1.3s"
+                        data-wow-delay="0.4s">
+                        <i class="lni lni-protection"></i>
+                        <h4 class="features_title">Fear of God</h4>
+                        <p>Being an ACK Sponsored school we give priviledge to the students knowledge of God.</p>
+                    </div> <!-- single features -->
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_features text-center mt-60 wow fadeInUp" data-wow-duration="1.3s"
+                        data-wow-delay="0.4s">
+                        <i class="lni lni-target"></i>
+                        <h4 class="features_title">Diligence</h4>
+                        <p>Our teachers and staff are diligent in their work.</p>
+                    </div> <!-- single features -->
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_features text-center mt-60 wow fadeInUp" data-wow-duration="1.3s"
+                        data-wow-delay="0.4s">
+                        <i class="lni lni-users"></i>
+                        <h4 class="features_title">Respect</h4>
+                        <p>We also teach our students to be respectfull of their elders and their peers.</p>
+                    </div> <!-- single features -->
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_features text-center mt-60 wow fadeInUp" data-wow-duration="1.3s"
+                        data-wow-delay="0.4s">
+                        <i class="lni lni-heart"></i>
+                        <h4 class="features_title">Love</h4>
+                        <p>We teach our students to take other as brothers and not enemies.</p>
                     </div> <!-- single features -->
                 </div>
             </div> <!-- row -->
@@ -299,7 +338,7 @@
                     <ul class="meta">
                         <li><a href="#0"><i class="lni lni-link"></i></a></li>
                     </ul>
-                    <h5 class="portfolio_title">Logo And Branding</h5>
+                    <h5 class="portfolio_title">Picture 1</h5>
                 </div> <!-- Single portfolio -->
             </div> <!-- portfolio wrapper -->
             <div class="single_portfolio wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.3s">
@@ -308,7 +347,7 @@
                     <ul class="meta">
                         <li><a href="#0"><i class="lni lni-link"></i></a></li>
                     </ul>
-                    <h5 class="portfolio_title">Bootstrap 5 Project</h5>
+                    <h5 class="portfolio_title">Picture 2</h5>
                 </div> <!-- Single portfolio -->
             </div> <!-- portfolio wrapper -->
             <div class="single_portfolio wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
@@ -317,7 +356,7 @@
                     <ul class="meta">
                         <li><a href="#0"><i class="lni lni-link"></i></a></li>
                     </ul>
-                    <h5 class="portfolio_title">Creative Projects</h5>
+                    <h5 class="portfolio_title">Picture 3</h5>
                 </div> <!-- Single portfolio -->
             </div> <!-- portfolio wrapper -->
             <div class="single_portfolio wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">
@@ -326,7 +365,7 @@
                     <ul class="meta">
                         <li><a href="#0"><i class="lni lni-link"></i></a></li>
                     </ul>
-                    <h5 class="portfolio_title">UI/UX Projects</h5>
+                    <h5 class="portfolio_title">Picture 4</h5>
                 </div> <!-- Single portfolio -->
             </div> <!-- portfolio wrapper -->
             <div class="single_portfolio wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">
@@ -335,7 +374,7 @@
                     <ul class="meta">
                         <li><a href="#0"><i class="lni lni-link"></i></a></li>
                     </ul>
-                    <h5 class="portfolio_title">App Development</h5>
+                    <h5 class="portfolio_title">Picture 6</h5>
                 </div> <!-- Single portfolio -->
             </div> <!-- portfolio wrapper -->
             <div class="single_portfolio wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.3s">
@@ -344,7 +383,7 @@
                     <ul class="meta">
                         <li><a href="#0"><i class="lni lni-link"></i></a></li>
                     </ul>
-                    <h5 class="portfolio_title">Web Development</h5>
+                    <h5 class="portfolio_title">Picture 7</h5>
                 </div> <!-- Single portfolio -->
             </div> <!-- portfolio wrapper -->
             <div class="single_portfolio wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
@@ -353,7 +392,7 @@
                     <ul class="meta">
                         <li><a href="#0"><i class="lni lni-link"></i></a></li>
                     </ul>
-                    <h5 class="portfolio_title">Business Card Design</h5>
+                    <h5 class="portfolio_title">Picture 8</h5>
                 </div> <!-- Single portfolio -->
             </div> <!-- portfolio wrapper -->
             <div class="single_portfolio wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">
@@ -362,7 +401,7 @@
                     <ul class="meta">
                         <li><a href="#0"><i class="lni lni-link"></i></a></li>
                     </ul>
-                    <h5 class="portfolio_title">Consulting Business</h5>
+                    <h5 class="portfolio_title">Picture 9</h5>
                 </div> <!-- Single portfolio -->
             </div> <!-- portfolio wrapper -->
         </div> <!-- row -->
@@ -383,9 +422,10 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6">
                     <div class="section_title text-center pb-25">
-                        <h4 class="title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">Meet The Team</h4>
-                        <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">Lorem ipsum dolor sit
-                            amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore.</p>
+                        <h4 class="title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">Meet Our Staff</h4>
+                        <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
+                            These are some of our teaching staff
+                        </p>
                     </div> <!-- section title -->
                 </div>
             </div> <!-- row -->
@@ -395,13 +435,8 @@
                         <img src="{% static 'media/img/' %}" alt="team">
                         
                         <div class="team_content">
-                            <h4 class="team_name"><a href="#0">Tom Hanks.</a></h4>
-                            <p>Head Of Ideas</p>
-                            <ul class="social">
-                                <li><a href="#0"><i class="lni lni-facebook-filled"></i></a></li>
-                                <li><a href="#0"><i class="lni lni-twitter-original"></i></a></li>
-                                <li><a href="#0"><i class="lni lni-linkedin-original"></i></a></li>
-                            </ul>
+                            <h4 class="team_name"><a href="#0">Emmanuel Wanyoyi</a></h4>
+                            <p>Dean Of Studies</p>
                         </div>
                     </div> <!-- single team -->
                 </div>
@@ -410,13 +445,8 @@
                         <img src="{% static 'media/img/' %}" alt="team">
                         
                         <div class="team_content">
-                            <h4 class="team_name"><a href="#0">Jennifer L.</a></h4>
-                            <p>UX Designer</p>
-                            <ul class="social">
-                                <li><a href="#0"><i class="lni lni-facebook-filled"></i></a></li>
-                                <li><a href="#0"><i class="lni lni-twitter-original"></i></a></li>
-                                <li><a href="#0"><i class="lni lni-linkedin-original"></i></a></li>
-                            </ul>
+                            <h4 class="team_name"><a href="#0">Ann Ndung'u</a></h4>
+                            <p>H.O.D Languages</p>
                         </div>
                     </div> <!-- single team -->
                 </div>
@@ -425,13 +455,8 @@
                         <img src="{% static 'media/img/' %}" alt="team">
                         
                         <div class="team_content">
-                            <h4 class="team_name"><a href="#0">Rob Percy</a></h4>
-                            <p>Creative Designer</p>
-                            <ul class="social">
-                                <li><a href="#0"><i class="lni lni-facebook-filled"></i></a></li>
-                                <li><a href="#0"><i class="lni lni-twitter-original"></i></a></li>
-                                <li><a href="#0"><i class="lni lni-linkedin-original"></i></a></li>
-                            </ul>
+                            <h4 class="team_name"><a href="#0">David Wachira</a></h4>
+                            <p>H.O.D Mathematics</p>
                         </div>
                     </div> <!-- single team -->
                 </div>
@@ -451,29 +476,18 @@
                         <div class="testimonial_active">
                             <div class="single_testimonial text-center">
                                 <img src="{% static 'media/img/' %}" alt="author">
-                                <h5 class="author_name">Isabela Moreira</h5>
-                                <span>UX Specialist, Yoast</span>
-                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                                    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-                                    vero eos accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren.
+                                <h5 class="author_name">Chief Principal Francis Gakuu</h5>
+                                <span>2024 - </span>
+                                <p>
+                                    The current Chief Principal Of Weithaga Boys High School.
                                 </p>
                             </div>
                             <div class="single_testimonial text-center">
                                 <img src="{% static 'media/img/' %}" alt="author">
-                                <h5 class="author_name">Fiona Smith</h5>
-                                <span>Sr. Software Engineer</span>
-                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                                    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-                                    vero eos accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren.
-                                </p>
-                            </div>
-                            <div class="single_testimonial text-center">
-                                <img src="{% static 'media/img/' %}" alt="author">
-                                <h5 class="author_name">Elon Musk</h5>
-                                <span>Creaitve Businessman</span>
-                                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                                    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-                                    vero eos accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren.
+                                <h5 class="author_name">Chief Principal Samuel M Muchina</h5>
+                                <span>2021 - 2024</span>
+                                <p>
+                                    Former Chief Principal Of Weithaga Boys High School.
                                 </p>
                             </div>
                         </div>
@@ -492,9 +506,10 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6">
                     <div class="section_title text-center pb-25">
-                        <h4 class="title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">Recent Blog</h4>
-                        <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">Lorem ipsum dolor sit
-                            amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore.</p>
+                        <h4 class="title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">School Updates</h4>
+                        <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
+                            School recent updates
+                        </p>
                     </div> <!-- section title -->
                 </div>
             </div> <!-- row -->
@@ -505,8 +520,10 @@
                             <img src="{% static 'media/img/' %}" alt="blog">
                         </div>
                         <div class="blog_content">
-                            <h3 class="blog_title"><a href="#0">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor .</a></h3>
-                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore.Lorem ipsum dolor sit amet, conse sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore magna .Lorem ipsum dolor sit amet, consetetur sadipscing elit.</p>
+                            <h3 class="blog_title"><a href="#0">Mid-Term Closing Day</a></h3>
+                            <p>
+                                School will be closing on 26<sup>th</sup> February 2025 for Mid-Term.
+                            </p>
                         </div>
                     </div> <!-- single blog -->
                 </div>
@@ -517,8 +534,8 @@
                             <img src="{% static 'media/img/' %}" alt="blog">
                         </div>
                         <div class="blog_content media-body">
-                            <h3 class="blog_title"><a href="#0">Lorem ipsum dolor sit amet, consetetur sadipscing .</a></h3>
-                            <p>Lorem ipsum dolor sit consetetur sadipscing elitr, sed diam.</p>
+                            <h3 class="blog_title"><a href="#0">Mid-Term Opening Day</a></h3>
+                            <p> Schools will be opening on 3 <sup>rd</sup> March 2025.</p>
                             <a href="#0" class="more">Read More</a>
                         </div>
                     </div> <!-- single blog -->
@@ -561,8 +578,7 @@
                 <div class="col-lg-6">
                     <div class="section_title section_title_2 text-center pb-25">
                         <h4 class="title wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">Contact Us</h4>
-                        <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">Lorem ipsum dolor sit
-                            amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt labor dolore.</p>
+                        <p class="wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">Contact Us below and we will respond as soon as possible.</p>
                     </div> <!-- section title -->
                 </div>
             </div> <!-- row -->
