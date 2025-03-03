@@ -24,10 +24,10 @@
 
         if (window.pageYOffset > sticky) {
             header_navbar.classList.add("sticky");
-            logo.setAttribute("src", "assets/images/logo-2.svg")
+            logo.setAttribute("src", "static/media/img/logo.svg")
         } else {
             header_navbar.classList.remove("sticky");
-            logo.setAttribute("src", "assets/images/logo.svg")
+            logo.setAttribute("src", "static/media/img/logo.svg")
         }
 
 

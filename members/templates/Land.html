@@ -73,6 +73,12 @@
                                 WEBZ
                             </a>
                             
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+                                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+
+                            <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
 
                             <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                 <ul id="nav" class="navbar-nav ms-auto">
@@ -98,8 +104,9 @@
                                         <a class="page-scroll" href="#contact">Contact</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="page-scroll" href="{% url 'members:selection' %}">Login</a>
+                                        <a href="{% url 'members:userSelection' %}" class="btn" style="border: none;">Login</a>
                                     </li>
+                                    
                                 </ul>
                             </div> <!-- navbar collapse -->
                         </nav> <!-- navbar -->

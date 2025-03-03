@@ -6,11 +6,11 @@
     --color-success: #41f1b6;
     --color-warning: #ffbb55;
     --color-white: #fff;
-    --color-info: #00eaf7;
-    --color-dark: #fff;
+    --color-info: #000;
+    --color-dark: #000;
     --color-light: rgba(132, 139, 200, 0.18);
-    --color-dark-varient: #00ff2d;
-    --bg-gradient: linear-gradient(135deg,  #8b5ef5, #3b82f6);
+    --color-dark-varient: #000;
+    --bg-gradient: linear-gradient(135deg,  #d1d1d1, #abadb0);
     
     --card-border-radius: 2rem;
     --border-radius-1: 0.4rem;
@@ -18,7 +18,6 @@
 
     --card-padding: 1.8rem;
     --box-shadow: 0 2rem 3rem var(--color-light);   
-    --color-background: rgb(2, 2, 131);  
 }
 
 .dark-theme{
@@ -124,8 +123,11 @@ header .navbar a{
     transition: all 300ms ease;
     padding: 0 2rem;
 }
+
 header .navbar a:hover {
     padding-top: 1.5rem;
+    background: rgb(210, 207, 207);
+    border-radius: .5rem;
 }
 header .navbar a.active{
     background: var(--color-light);

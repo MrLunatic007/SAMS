@@ -5,7 +5,7 @@ app_name = "members"
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('selection/', views.selection, name="selection"),
+    path('selection/', views.selection, name="userSelection"),
     path('teacher/', views.teacher_login_user, name="teacher_user_login"),
     path('student/', views.student_login_user, name="student_user_login"),
     path('parent/', views.parent_login_user, name='parent_user_login'),

@@ -1,8 +1,8 @@
 :root {
-    --primary-color: #3b82f6;
+    --primary-color: #f1f4fa;
     --primary-dark: #1d4ed8;
-    --text-color: #fff;
-    --bg-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    --text-color: #000;
+    --bg-gradient: linear-gradient(135deg, #a7a8ab, #b7b6ba);
     --glass-bg: rgba(255, 255, 255, 0.1);
     --glass-border: rgba(255, 255, 255, 0.2);
     --success-color: #10b981;
@@ -30,6 +30,7 @@ body {
     width: 100%;
     max-width: 400px;
     padding: 1rem;
+    
 }
 
 .form-container {
@@ -39,6 +40,7 @@ body {
     border-radius: 1rem;
     padding: 2rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: #fff;
 }
 
 h2 {
@@ -84,25 +86,25 @@ h2 {
 .messages .error {
     background: rgba(239, 68, 68, 0.2);
     border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #fecaca;
+    color: #000;
 }
 
 .messages .success {
     background: rgba(16, 185, 129, 0.2);
     border: 1px solid rgba(16, 185, 129, 0.3);
-    color: #a7f3d0;
+    color: #000;
 }
 
 .messages .warning {
     background: rgba(245, 158, 11, 0.2);
     border: 1px solid rgba(245, 158, 11, 0.3);
-    color: #fde68a;
+    color: #000;
 }
 
 .messages .info {
     background: rgba(59, 130, 246, 0.2);
     border: 1px solid rgba(59, 130, 246, 0.3);
-    color: #bfdbfe;
+    color: #000;
 }
 
 .input-group {
@@ -128,20 +130,20 @@ label svg {
     width: 100%;
     padding: 0.75rem 1rem;
     background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid --text-color;
     border-radius: 0.5rem;
-    color: white;
+    color: var(--text-color);
     font-size: 1rem;
     transition: all 0.3s ease;
     outline: none;
 }
 
 .u-input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-color);
 }
 
 .u-input:focus {
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: var(--text-color);
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
 }
 
@@ -150,23 +152,29 @@ label svg {
 .form-container.has-value .u-input:not(:focus) {
     filter: blur(4px);
     opacity: 0.7;
+    transition: .3s ease-in-out;
 }
 
 .btn {
-    width: 100%;
+    margin-left: 1rem;
+    width: 90%;
     padding: 0.75rem;
-    background: white;
+    background: #3b82f6;
     color: var(--primary-color);
     border: none;
     border-radius: 0.5rem;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all .3s ease-in-out;
     margin-top: 1rem;
 }
 
 .btn:hover {
-    background: rgba(255, 255, 255, 0.9);
-    transform: translateY(-1px);
-}   
+    background: #000;
+    font-size: larger;
+    padding: 1.5rem;
+    width: 100%;
+    margin-left: 0;
+}
+

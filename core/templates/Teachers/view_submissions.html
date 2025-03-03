@@ -34,19 +34,42 @@
         </tr>
         {% endfor %}
     </tbody>
+
+    <tbody>
+        <h2>Sumitte</h2>
+        {% for submission in submissions %}
+        <tr>
+            <td>{{ submission.student.user.get_full_name }}</td>
+            <td>{{ submission.student.student_id}}</td>
+            <td>{{ submission.assignment.name }}</td>
+            <td>{{ submission.submitted_at }}</td>
+            <td>
+                {% if submission.submission_file %}
+                <a href="{{ submission.submission_file.url }}" target="_blank">View File</a>
+                {% else %}
+                No file uploaded
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No submissions yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 
 <style>
     /* Styles for the table */
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse:separate;
     margin-top: 20px;
     font-family: Arial, sans-serif;
 }
 
 th, td {
-    padding: 12px;
+    padding: 10px;
     text-align: left;
     border: 1px solid #ddd;
 }
