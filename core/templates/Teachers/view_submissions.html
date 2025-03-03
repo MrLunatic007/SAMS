@@ -3,7 +3,7 @@
 {% block title %}Submitted Assignment{% endblock %}
 
 {% block content %}
-<h2>Submitted Assignments</h2>
+<h2 style="text-decoration: underline; text-decoration-thickness: 5px;"><b>Submitted Assignments</b></h2>
 
 <table border="1">
     <thead>
@@ -15,7 +15,10 @@
             <th>File</th>
         </tr>
     </thead>
+
+
     <tbody>
+        <h2>Submitted</h2>
         {% for submission in submissions %}
         <tr>
             <td>{{ submission.student.user.get_full_name }}</td>
@@ -37,10 +40,23 @@
         {% endfor %}
     </tbody>
 
+</table>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Admission</th>
+            <th>Assignment</th>
+            <th>Submission Time</th>
+            <th>File</th>
+        </tr>
+    </thead>
+
     <br>
 
-    <!-- <tbody>
-        <h2>Submitted</h2>
+    <tbody>
+        <h2>Not Submitted</h2>
         {% for submission in submissions %}
         <tr>
             <td>{{ submission.student.user.get_full_name }}</td>
@@ -60,7 +76,7 @@
             <td colspan="5">No submissions yet.</td>
         </tr>
         {% endfor %}
-    </tbody> -->
+    </tbody>
 </table>
 
 <style>
