@@ -27,7 +27,7 @@ class Assignments(models.Model):
         return self.name
 
 class AssignmentSubmission(models.Model):
-    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name='submissions')
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name='submissions', null=True)
     assignment = models.ForeignKey(Assignments, on_delete=models.CASCADE, related_name='student_submissions')
     submission_file = models.FileField(upload_to='submissions/%Y/%m/%d/', blank=True, null=True)
     answer_text = models.TextField(blank=True, null=True)
