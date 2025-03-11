@@ -33,15 +33,18 @@ def access_denied(request):
 def studentdash(request):
     try:
         student_profile = StudentProfile.objects.get(user=request.user)
+        study_profile = student_profile.subjects.all()
         noticeb = Notice.objects.all()
     except StudentProfile.DoesNotExist or Subjects.DoesNotExist:
         student_profile = None  # Handle the case where the profile doesn't exist
         noticeb = None
+        study_profile = None    
 
     context = {
         'user': request.user,
         'student_profile': student_profile,
         'current_page': 'dashboard',
+        'study_profile': study_profile,
         'noticeb': noticeb
     }
     return render(request, 'Students/dash.html', context)
@@ -151,7 +154,7 @@ def view_assignment(request, assignment_id):
 def teacherdash(request):
     try:
         teacher_profile = TeacherProfile.objects.get(user=request.user)
-        subjects_taught = teacher_profile.subjects_taught.all()
+        subjects_taught = teacher_profile.subjects_taught.all()  # Get all subjects the teacher is teaching
         noticeb = Notice.objects.all()
     except TeacherProfile.DoesNotExist:
         teacher_profile = None
