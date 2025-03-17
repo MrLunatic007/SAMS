@@ -1,0 +1,9 @@
+[build]
+  command = "python manage.py migrate && python manage.py collectstatic --noinput"
+  publish = "staticfiles"
+
+[functions]
+  directory = "netlify/functions"
+
+[build.environment]
+  PYTHON_VERSION = "3.9"
