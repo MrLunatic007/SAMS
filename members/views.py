@@ -3,11 +3,25 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib import messages
 from django.urls import reverse
 
+from core.models import Notice
+
 def index(request):
-    return render(request, 'Land.html')
+    try:
+        noticeb = Notice.objects.all()
+    except Notice.DoesNotExist:
+        noticeb = None
+
+    context = {
+        'noticeb': noticeb
+    }
+
+    return render(request, 'Land.html', context)
 
 def selection(request):
     return render(request, 'selection.html')
+
+def apply(request):
+    return render(request, 'apply.html')
 
 def student_login_user(request):
     # Redirect if user is already authenticated

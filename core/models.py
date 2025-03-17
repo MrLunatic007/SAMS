@@ -27,7 +27,7 @@ class Assignments(models.Model):
         return self.name
 
 class AssignmentSubmission(models.Model):
-    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name='submissions')
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name='submissions', null=True)
     assignment = models.ForeignKey(Assignments, on_delete=models.CASCADE, related_name='student_submissions')
     submission_file = models.FileField(upload_to='submissions/%Y/%m/%d/', blank=True, null=True)
     answer_text = models.TextField(blank=True, null=True)
@@ -72,6 +72,7 @@ class Notice(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=150)
     importance = models.CharField(max_length=50, null=True )
+    date = models.DateField(default=timezone.now)
 
     def __str__(self):
       return self.name

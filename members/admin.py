@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, StudentProfile, TeacherProfile, Subjects, ParentProfile
+from .models import CustomUser, StudentProfile, TeacherProfile, Subjects, ParentProfile, Class
 
 # Register the Subject model
 @admin.register(Subjects)
@@ -56,4 +56,6 @@ class TeacherProfileAdmin(admin.ModelAdmin):
 
 @admin.register(ParentProfile)
 class ParentProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'parent_id', 'phone_number')    
+    list_display = ('user', 'parent_id', 'phone_number')
+
+admin.site.register(Class)

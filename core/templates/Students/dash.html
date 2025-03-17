@@ -50,6 +50,7 @@
             
             {% endif %}
             <h1>Studying Subjects</h1>
+            {% if study_profile %}
             <div class="subjects">
                 {% for subject in study_profile %}
                     <div class="eg">
@@ -57,7 +58,7 @@
                     </div>
                 {% endfor %}
             </div>
-
+            {% endif %}
         </main>
 
         <div class="right">

@@ -342,6 +342,12 @@ p {
   transition: all 0.3s ease-out 0s;
 }
 
+@media (max-width: 1200px) {
+  .header_navbar {
+    width: 50%;
+  }
+}
+
 .sticky {
   position: fixed;
   z-index: 99;
@@ -407,7 +413,7 @@ p {
   top: -7px;
 }
 
-@media only screen and (min-width: 768px) and (max-width: 991px) {
+@media only screen and (min-width: 500px) and (max-width: 1200px){
   .navbar-collapse {
     position: absolute;
     top: 100%;
@@ -778,6 +784,8 @@ p {
 .single_features p {
   margin-top: 15px;
 }
+
+
 
 .single_features:hover i {
   color: #E84E4E;

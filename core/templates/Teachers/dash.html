@@ -2,12 +2,15 @@
 
 {% load static %}
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
     {% block title %}Teacher Dashboard{% endblock title %}
 </head>
-
 <body>
+
     {% block content %}
+   
     <div class="container">
         <aside>
             <!--Profile Done-->
@@ -16,38 +19,18 @@
                     <div class="info">
                         <p>NAME: <b>{{ user.get_full_name }}</b></p>
                         {% if teacher_profile %}
-                            <small class="text-muted">TSC No: {{ teacher_profile.teacher_id }}</small>
+                            <small class="text-muted">ID: {{ teacher_profile.teacher_id }}</small>
                         {% else %}
-                            <small class="text-muted">No Teacher ID</small>
+                            <small class="text-muted">ADM: No ID detected</small>
                         {% endif %}
                     </div>
                 </div>
                 <div class="about">
-                    {% if user.is_teacher %}
-                    <h5>Teaching Subjects</h5>
-                    {% elif user.is_student %}
-                    <h5>Learning Subjects</h5>
-                    {% endif %}
-                    {% if subjects_taught %}
-                    <p>{% for subject in subjects_taught %}
-                            <li>{{subject.name}}</li>
-                        {% empty %}
-                            <li>No subjects</li>
-                        {% endfor %}
-                    </p>
-                    {% endif %}
+                    <h5>Class</h5>
+                    <p>{{ teacher_profile.teaching_class }}</p>
                     <h5>DOB</h5>
                     <p>{{ user.date_of_birth }}</p>
-                    {% if user.is_student %}
-                    <h5>Guardian Contact</h5>
-                    <p>{{ student_profile.guardian_contact }}</p>
-                    {% endif %}
-
-                    {% if user.is_teacher %}
-                    <h5>Work Email Address</h5>
-                    {% elif user.is_student %}
-                    <h5>Student Email Address</h5>
-                    {% endif %}
+                    <h5>Teacher Email</h5>
                     <p>{{ user.email }}</p>
                 </div>
             </div>
@@ -55,25 +38,25 @@
         
 
         <main>
-            {% if error_message %}
+            {% if messages %}
+            {%for message in messages%}
             <div class="error-message">
                 <span class="error-icon">✅</span>
-                {{ error_message }}
+                {{ message }}
             </div>
+            {% endfor %}
             
             {% endif %}
-            <h1>Teaching Subjects</h1>
-            <div class="subjects">
-                {% if subjects_taught %}
+            <h1>Studying Subjects</h1>
+                <div class="subjects">
                     {% for subject in subjects_taught %}
                         <div class="eg">
-                            <h3>{{ subject.name }}</h3>
+                            <h3>{{ subject.name }}</h3>  <!-- Display the subject name -->
                         </div>
                     {% endfor %}
-                {% else %}
-                    <p>No subjects assigned yet.</p>
-                {% endif %}
-            </div>
+                </div>
+
+
         </main>
 
         <div class="right">
@@ -96,7 +79,6 @@
             </div>
 
         </div>
-        
     </div>
     {% endblock content %}
 </body>

@@ -1,6 +1,6 @@
 :root {
-    --bg-gradient: linear-gradient(135deg, #a7a8ab, #b7b6ba);
-    --text-color: #fff;
+    --bg-gradient: linear-gradient(135deg,  #fdfdfd, #f3f3f3);
+    --text-color: #8080;
 }
 
 body {
@@ -77,7 +77,7 @@ main .selection-card:hover{
 }
 
 .call-to-action-btn:hover{
-    background: #000;
+    background: #fff;
     font-size: larger;
     padding: 1.5rem;
     width: 6rem;
