@@ -62,10 +62,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'SAMS.wsgi.application'
 
-STATICFILES_FINDERS = [
-    'compressor.finders.CompressorFinder',
-]
-
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
