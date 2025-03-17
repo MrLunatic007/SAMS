@@ -10,7 +10,11 @@
     --color-dark: #000;
     --color-light: rgba(132, 139, 200, 0.18);
     --color-dark-varient: #000;
+<<<<<<< HEAD
     --bg-gradient: linear-gradient(135deg,  #fdfdfd, #f3f3f3);
+=======
+    --bg-gradient: linear-gradient(135deg,  #e6dddd, #ffffff);
+>>>>>>> f1fca0a882142cc2cefe5c9583d6ec91e8bca7d2
     
     --card-border-radius: 2rem;
     --border-radius-1: 0.4rem;
