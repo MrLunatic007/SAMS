@@ -1,0 +1,116 @@
+:root {
+<<<<<<< HEAD
+    --bg-gradient: linear-gradient(135deg,  #fdfdfd, #f3f3f3);
+    --text-color: #8080;
+=======
+    --bg-gradient: linear-gradient(135deg, #e6dddd, #ffffff);
+    --text-color: #000;
+    --text-hover-color: #FFF;
+>>>>>>> f1fca0a882142cc2cefe5c9583d6ec91e8bca7d2
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-gradient);
+}
+
+main {
+    position: relative;
+    margin-top: 1.4rem;
+}
+
+.container {
+    position: relative;
+    display: grid;
+    width: 93%;
+    margin: 3rem;
+    gap: 4rem;
+    grid-template-columns: 20rem 20rem 20rem;
+    padding-top: 4rem;
+}
+
+main .wrapper {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 2rem;
+    width: 20rem;
+}
+
+main .selection-card {
+    border: 1px solid gainsboro;
+    border-radius: 1.5rem;
+    padding: 5rem;
+    color: var(--text-color);
+    text-align: center;
+    margin: 0 auto;
+    width: 10rem;
+    transition: .3s ease-in-out;
+}
+
+main .selection-card:hover{
+    box-shadow: 3px 3px 3px 3px  black;
+    font-size: 18px;
+    padding: 5rem;
+}
+
+/* Blur effect */
+.wrapper:has(.selection-card:hover) .selection-card:not(:hover),
+.wrapper.has-value .selection-card:not(:hover) {
+    filter: blur(4px);
+    opacity: 0.7;
+    transition: .3s ease-in-out;
+}
+
+
+.selection-card a {
+    text-decoration: none;
+}
+
+.selection-card .call-to-action-btn {
+    all: unset;
+    text-decoration: none;
+    border: 2px solid whitesmoke;
+    padding: 1rem;
+    width: 5rem;
+    border-radius: 2rem;
+    color: var(--text-color);
+    background: #3b82f6;
+    transition: .3s;
+}
+
+.call-to-action-btn:hover{
+    background: #fff;
+    font-size: larger;
+    padding: 1.5rem;
+    width: 6rem;
+    color: var(--text-hover-color);
+}
+
+
+/* Mobile Devices (Below 768px) */
+@media screen and (max-width: 768px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 93%;
+        margin: 3rem;
+        gap: 1.8rem;
+        padding-top: 4rem;
+    }
+}
+
+/* Small Phones (Below 480px) */
+@media screen and (max-width: 480px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 93%;
+        margin: 3rem;
+        gap: 1.8rem;
+        padding-top: 4rem;
+    }
+}
