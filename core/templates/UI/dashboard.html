@@ -1,0 +1,79 @@
+{% extends "base.html" %} {% load static %}
+ {% block title %}
+ Dashboard
+ {%endblock title %} {% block content %}
+<div class="container">
+  <!-- Profile Summary -->
+  <div class="profile-summary">
+    <div class="info">
+      <p><b>{{ user.get_full_name }}</b></p>
+
+      {% if user.is_student %} {% if student_profile %}
+      <small class="text-muted">Class: {{ student_profile.class_name }}</small>
+      {% endif %} {% elif user.is_teacher %} {% if teacher_profile %}
+      <small class="text-muted"
+        >Class: {{ teacher_profile.teaching_class }}</small
+      >
+      {% endif %} {% elif user.is_parent %} {% if parent_profile %}
+      <small class="text-muted"
+        >Student: {{ students_profile.student_adm }}</small
+      >
+      {% endif %} {% endif %}
+    </div>
+  </div>
+
+  <!-- Main Section -->
+  <main>
+    {% if messages %} {% for message in messages %}
+    <div class="error-message">
+      <span class="error-icon">✅</span> {{ message }}
+    </div>
+    {% endfor %} {% endif %} {% if user.is_student %}
+    <h1>Studying Subjects</h1>
+    {% if student_profile.subjects.all %}
+    <div class="subjects">
+      {% for subject in student_profile.subjects.all %}
+      <div class="eg"><h3>{{ subject.name }}</h3></div>
+      {% endfor %}
+    </div>
+    {% endif %} {% elif user.is_teacher %}
+    <h1>Subjects Being Taught</h1>
+    <div class="subjects">
+      {% for subject in subjects_taught %}
+      <div class="eg"><h3>{{ subject.name }}</h3></div>
+      {% endfor %}
+    </div>
+    {% elif user.is_parent %}
+    <h1>Student's Subjects</h1>
+    <div class="subjects">
+      {% for subject in study_profile %}
+      <div class="eg"><h3>{{ subject.name }}</h3></div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Notifications Section -->
+    <div class="notifications-section">
+      <h2>Notifications</h2>
+      <div class="notifications-container">
+        {% if noticeb %}
+        <div class="updates">
+          {% for notice in noticeb %}
+          <div class="notification-item">
+            <h4>{{ notice.name }}</h4>
+            <p>{{ notice.description }}</p>
+            <small class="text-muted"
+              >Importance:
+              <b style="color: red">{{ notice.importance }}</b></small
+            >
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <small class="text-muted">No Notifications</small>
+        {% endif %}
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock content %}

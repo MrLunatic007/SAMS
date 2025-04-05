@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Assignments{% endblock title %}
+
+{% block content %}
+<main>
+    <h1 class="page-title">Assignments</h1>
+
+    {% if user.is_teacher %}
+    <button class="noticeBtn" type="button" id="open_btn" onclick="Assignment_Open()">Create Assignment</button>
+
+    <div class="assignment-form-container" id="assign-form" style="display: none;">
+        <h2>Create New Assignment</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="due_date">Due Date</label>
+                <input type="date" id="due_date" name="due_date" required>
+            </div>
+            <div class="form-group">
+                <label for="creation_date">Creation Date</label>
+                <p id="creation_date">{{ current_date|date:"Y-m-d" }}</p>
+            </div>
+            <div class="form-group">
+                <label for="file">File</label>
+                <input type="file" name="file" id="file">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Create Assignment</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <div class="assignment-container">
+        {% if assigns %}
+            {% for assign in assigns %}
+            <div class="{% if user.is_teacher %}assignment-card-1{% else %}assignment-card{% endif %}">
+                <div class="assignment-content">
+                    <div class="assignment-title">{{ assign.name }}</div>
+                    <div class="assignment-description">{{ assign.description }}</div>
+                    <div class="assignment-duedate">Due Date: {{ assign.due_date }}</div>
+                    <div class="assignment-file">File: {{ assign.file_name }}</div>
+                    <div class="assignment-file">Creation Date: {{ assign.createDate }}</div>
+
+                    {% if user.is_teacher %}
+                    <a href="{% url 'core:delete_assignment' assign.id %}" class="delbtn" onclick="return confirm('Delete this assignment?')">Delete</a>
+                    {% else %}
+                    <a href="{% url 'core:download_assignment' assign.id %}" class="downbtn">Download</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <h2>No Assignments</h2>
+        {% endif %}
+    </div>
+</main>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    function Assignment_Open() {
+        var form = document.getElementById('assign-form');
+        var btn = document.getElementById('open_btn');
+        
+        if (form.style.display === "none" || form.style.display === "") {
+            form.style.display = "block";
+            btn.textContent = "Close Form";
+        } else {
+            form.style.display = "none";
+            btn.textContent = "Create Assignment";
+        }
+    }
+</script>
+{% endblock extra_js %}

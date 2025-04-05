@@ -34,17 +34,15 @@ class Class(models.Model):
 
     def __str__(self):
         return self.name
-
 class StudentProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     student_id = models.CharField(max_length=50, primary_key=True)
     class_name = models.ForeignKey(Class, on_delete=models.CASCADE)
     guardian_contact = models.CharField(max_length=50)
-    subjects = models.ForeignKey(Subjects, on_delete=models.CASCADE, null=True)
+    subjects = models.ManyToManyField(Subjects, blank=True)  # Many-to-many relationship
 
     def __str__(self):
         return f"Student: {self.user.username} (ID: {self.student_id})"
-
 
 class TeacherProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)

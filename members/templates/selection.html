@@ -6,37 +6,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/selection.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>User Selection</title>
 </head>
 <body>
     <main>
         <div class="container">
-                <div class="wrapper">
-                    <div class="selection-card">
+            <div class="wrapper">
+                <div class="selection-card teacher">
                     <h2>Teacher</h2>
                     <p>If you are a Teacher, Dean or Non-Teaching staff</p>
-                    <a href='{% url "members:teacher_user_login"%}' ><h3><button class="call-to-action-btn">Login</button></h3></a>
+                    <a href='{% url "members:login" %}?user_type=teacher'>
+                        <button class="call-to-action-btn">Login</button>
+                    </a>
                 </div>
             </div>
 
             <div class="wrapper">
-                <div class="selection-card">
+                <div class="selection-card student">
                     <h2>Student</h2>
                     <p>If you are a Student in WEBZ</p>
-                    <a href='{% url "members:student_user_login"%}'><h3><button class="call-to-action-btn">Login</button></h3></a>
+                    <a href='{% url "members:login" %}?user_type=student'>
+                        <button class="call-to-action-btn">Login</button>
+                    </a>
                 </div>
             </div>
             
             <div class="wrapper">
-                <div class="selection-card">
+                <div class="selection-card parent">
                     <h2>Parent</h2>
                     <p>Your son is in this school</p>
-                    <a href='{% url "members:CommingSoon" %}'><h3><button class="call-to-action-btn">Login</button></h3></a>
+                    <a href='{% url "members:login" %}?user_type=parent'>
+                        <button class="call-to-action-btn">Login</button>
+                    </a>
                 </div>
             </div>
         </div>
-        
-        
     </main>
 </body>
 </html>

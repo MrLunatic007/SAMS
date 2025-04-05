@@ -1,0 +1,19 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Access Denied</title>
+    <link rel="stylesheet" href="{% static 'css/access.css' %}">
+  </head>
+  <body>
+    <div class="access-container">
+      <h1>Restricted Access</h1>
+      <p>Dear user, you are currently logged in as <strong>{{ user.get_username }}</strong></p>
+      <p>Please log out and log in as the appropriate user.</p>
+      <a href="{% url 'members:userSelection' %}" class="cta">Logout</a>
+    </div>
+  </body>
+</html>

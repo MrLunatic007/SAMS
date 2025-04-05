@@ -1,97 +1,104 @@
 {% load static %}
 
-<!DOCTYPE>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}{% endblock title %}</title>
-        <link rel="shortcut icon" href="./images/logo.png">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/dash_style.css' %}">
-    </head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}SAMS{% endblock title %}</title>
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/dash_style.css' %}" />
+    {% block extra_css %}{% endblock extra_css %}
+  </head>
 
-    <style>
-        {% block extra_css %} {% endblock extra_css %}
-    </style>
+  <body>
+    <!-- Mobile Menu Toggle Button (only visible on small screens) -->
+    <div class="menu-toggle">
+      <span class="material-icons-sharp">menu</span>
+    </div>
 
-    <body>
-        <header>
-            <!--Navigation bar not done-->
-            <div class="logo" title="School Automated Management System">
-                <h2>S<span class="danger">A</span>M<span class="danger">S</span></h2>
-            </div>
-            <div class="navbar">
-                    {% if user.is_student %}
-                    <a href="{% url 'core:student_dash' %}" class="page-scroll">
-                    {% elif user.is_teacher %}
-                    <a href="{% url 'core:teacher_dash' %}" class="page-scroll">
-                    {% elif user.is_parent%}
-                    </a>
-                    <a href='{% url "core:parent_dash"%}' class="page-scroll">
-                    {% endif %}
-                    
-                        <span class="material-icons-sharp">home</span>
-                        
-                        <h3 za>Home</h3>
-                    </a>
-                    {% if user.is_student %}
-                    <a href="{% url 'core:student_assignment' %}" class="page-scroll">
-                    {% elif user.is_teacher %}
-                    <a href="{% url 'core:teacher_assignments' %}" class="page-scroll">
-                    {% elif user.is_parent%}
-                    <a href="{% url 'core:parent_studentProgress'%}" class="page-scroll">
-                    {% endif %}
-                        <span class="material-icons-sharp">assignment</span>
-                        {% if user.is_parent%}
-                        <h3>Student progress</h3>
-                        {% else %}
-                        <h3>Assignments</h3>
-                        {% endif %}
-                    </a>
+    <!-- Left Sidebar Navigation -->
+    <nav class="navbar">
+      <div class="logo" title="School Automated Management System">
+        <h2>S<span class="danger">A</span>M<span class="danger">S</span></h2>
+      </div>
 
-                    {% if user.is_teacher %}
-                    <a href="{% url 'core:teacher_view_submissions' %}" class="page-scroll">
-                    {% endif %}
-                    {% if user.is_teacher %}
-                        <span class="material-icons-sharp">assignment</span>
-                        <h3>Submitted Assignments</h3>
-                    </a>
-                    {% endif %}
+      {% if user.is_student %}
+      <a href="{% url 'core:student_dash' %}" class="page-scroll {% if request.resolver_match.url_name == 'student_dash' %}active{% endif %}">
+      {% elif user.is_teacher %}
+      <a href="{% url 'core:teacher_dash' %}" class="page-scroll {% if request.resolver_match.url_name == 'teacher_dash' %}active{% endif %}">
+      {% elif user.is_parent %}
+      <a href="{% url 'core:parent_dash' %}" class="page-scroll {% if request.resolver_match.url_name == 'parent_dash' %}active{% endif %}">
+      {% endif %}
+        <span class="material-icons-sharp">home</span>
+        <h3>Home</h3>
+      </a>
 
-                    {% if user.is_teacher %}
-                    <a href="{% url 'core:notice' %}" class="page-scroll">
-                        <span class="material-icons-sharp">
-                            event_note
-                            </span>
-                        <h3>NoticeBoard</h3>
-                    </a>
-                    {% endif %}
+      {% if user.is_student %}
+      <a href="{% url 'core:student_assignment' %}" class="page-scroll {% if request.resolver_match.url_name == 'student_assignment' %}active{% endif %}">
+      {% elif user.is_teacher %}
+      <a href="{% url 'core:teacher_assignments' %}" class="page-scroll {% if request.resolver_match.url_name == 'teacher_assignments' %}active{% endif %}">
+      {% elif user.is_parent %}
+      <a href="{% url 'core:parent_studentProgress' %}" class="page-scroll {% if request.resolver_match.url_name == 'parent_studentProgress' %}active{% endif %}">
+      {% endif %}
+        <span class="material-icons-sharp">assignment</span>
+        <h3>{% if user.is_parent %}Student Progress{% else %}Assignments{% endif %}</h3>
+      </a>
 
-                <a href="{% url 'members:user_logout' %}" class="page-scroll">
-                    <span class="material-icons-sharp" onclick="">logout</span>
-                    <h3>Logout</h3>
-                </a>
-            </div>
-            <div id="profile-btn">
-                <span class="material-icons-sharp">person</span>
-            </div>
-            <div class="theme-toggler">
-                <span class="material-icons-sharp">light_mode</span>
-                <span class="material-icons-sharp active">dark_mode</span>
-            </div>
-            
-        </header>
-        <main class="content">
-            {% block content %}
-            {% endblock content %}      
-        </main>
+      {% if user.is_teacher %}
+      <a href="{% url 'core:t_v_submissions' %}" class="page-scroll {% if request.resolver_match.url_name == 'teacher_view_submissions' %}active{% endif %}">
+        <span class="material-icons-sharp">assignment_turned_in</span>
+        <h3>Submissions</h3>
+      </a>
 
-        <footer>
-        </footer>
+      <a href="{% url 'core:notice' %}" class="page-scroll {% if request.resolver_match.url_name == 'notice' %}active{% endif %}">
+        <span class="material-icons-sharp">event_note</span>
+        <h3>Notice Board</h3>
+      </a>
+      {% endif %}
+
+      <a href="{% url 'members:user_logout' %}" class="page-scroll">
+        <span class="material-icons-sharp">logout</span>
+        <h3>Logout</h3>
+      </a>
+    </nav>
+
+    <!-- Top Header -->
+    <header>
+      <div id="notification-btn">
+        <span class="material-icons-sharp">notifications</span>
+        {% if notification_count > 0 %}
+        <div class="notification-badge">{{ notification_count }}</div>
+        {% endif %}
+      </div>
+
+      <div class="theme-toggler">
+        <span class="material-icons-sharp">light_mode</span>
+        <span class="material-icons-sharp">dark_mode</span>
+      </div>
+
+      <div id="profile-btn">
+        <a href="{% url 'core:profile' %}">
+            <span class="material-icons-sharp">person</span>
+        </a>
         
-        <script src="{% static 'js/script.js' %}"></script>
-        <script>{% block extra_js %}{% endblock extra_js %}</script>
-    </body>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="content">
+      {% block content %}{% endblock content %}
+    </main>
+
+    <footer>
+      <!-- Optional footer content -->
+      <p>&copy; {% now "Y" %} School Automated Management System. All rights reserved.</p>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    {% block extra_js %}{% endblock extra_js %}
+  </body>
 </html>
+

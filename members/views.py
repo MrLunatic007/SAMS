@@ -23,89 +23,48 @@ def selection(request):
 def apply(request):
     return render(request, 'apply.html')
 
-def student_login_user(request):
-    # Redirect if user is already authenticated
-    if request.user.is_authenticated and request.user.is_student:
-        return redirect('core:student_dash')
-
+def login_user(request):
+    # Get user type from GET parameter or POST data
+    user_type = request.POST.get('user_type') or request.GET.get('user_type', 'student')
+    
+    # Validate that user_type is one of the acceptable values
+    if user_type not in ['student', 'teacher', 'parent']:
+        user_type = 'student'  # Default to student if invalid
+    
+    # Check if the user is already authenticated with the correct role
+    if request.user.is_authenticated:
+        if (user_type == 'student' and request.user.is_student) or \
+           (user_type == 'teacher' and request.user.is_teacher) or \
+           (user_type == 'parent' and request.user.is_parent):
+            return redirect(f'core:{user_type}_dash')
+    
     if request.method == "POST":
-        # Getting the input - changed from 'login' to 'username' to match form field
         username = request.POST.get('username')
         password = request.POST.get('password')
-
+        
         if username and password:
             # Authenticate user
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                # Login the user
-                if user.is_student:
+                # Check if user has the required role
+                if (user_type == 'student' and user.is_student) or \
+                   (user_type == 'teacher' and user.is_teacher) or \
+                   (user_type == 'parent' and user.is_parent):
                     auth_login(request, user)
                     messages.success(request, f'Welcome back {username}!')
-                    return redirect('core:student_dash')
+                    return redirect(f'core:{user_type}_dash')
                 else:
-                    messages.error(request, f'{user} role is not specified')
+                    messages.error(request, f'Your account does not have {user_type} privileges')
             else:
                 messages.error(request, "Invalid username or password. Please try again.")
         else:
             messages.error(request, "Please provide both username and password.")
     
-    return render(request, 'StudentLogin.html')
-
-def teacher_login_user(request):
-    # Redirect if user is already authenticated
-    if request.user.is_authenticated and request.user.is_teacher:
-        return redirect('core:teacher_dash')
-
-    if request.method == "POST":
-        # Getting the input - changed from 'login' to 'username' to match form field
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        if username and password:
-            # Authenticate user
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                # Login the user
-                if user.is_teacher:
-                    auth_login(request, user)
-                    messages.success(request, f'Welcome back {username}!')
-                    return redirect('core:teacher_dash')
-                else:
-                    messages.error(request, f'{user} role is not specified')
-            else:
-                messages.error(request, "Invalid username or password. Please try again.")
-        else:
-            messages.error(request, "Please provide both username and password.")
+    context = {
+        'user_type': user_type
+    }
     
-    return render(request, 'TeacherLogin.html')
-
-def parent_login_user(request):
-    # Redirect if user is already authenticated
-    if request.user.is_authenticated and request.user.is_parent:
-        return redirect('core:parent_dash')
-
-    if request.method == "POST":
-        # Getting the input - changed from 'login' to 'username' to match form field
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        if username and password:
-            # Authenticate user
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                # Login the user
-                if user.is_parent:
-                    auth_login(request, user)
-                    messages.success(request, f'Welcome back {username}!')
-                    return redirect('core:parent_dash')
-                else:
-                    messages.error(request, f'{user} role is not specified')
-            else:
-                messages.error(request, "Invalid username or password. Please try again.")
-        else:
-            messages.error(request, "Please provide both username and password.")
-    
-    return render(request, 'ParentLogin.html')
+    return render(request, 'Login.html', context)
 
 def user_logout(request):
     logout(request)

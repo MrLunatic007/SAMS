@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Assignment Submissions{% endblock %}
+
+{% block content %}
+<h2 class="section-title">Assignment Submissions</h2>
+
+<div class="submissions-section">
+    <h3>Submitted Assignments</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Admission</th>
+                <th>Assignment</th>
+                <th>Submission Time</th>
+                <th>File</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for submission in submissions %}
+            <tr>
+                <td>{{ submission.student.user.get_full_name }}</td>
+                <td>{{ submission.student.student_id }}</td>
+                <td>{{ submission.assignment.name }}</td>
+                <td>{{ submission.submitted_at }}</td>
+                <td>
+                    {% if submission.submission_file %}
+                    <a href="{{ submission.submission_file.url }}" target="_blank" class="file-link">View File</a>
+                    {% else %}
+                    No file uploaded
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="no-data">No submissions found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="submissions-section">
+    <h3>Pending Submissions</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Admission</th>
+                <th>Assignment</th>
+                <th>Due Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in non_submissions %}
+            <tr>
+                <td>{{ item.student.user.get_full_name }}</td>
+                <td>{{ item.student.student_id }}</td>
+                <td>{{ item.assignment.name }}</td>
+                <td>{{ item.assignment.due_date }}</td>
+                <td class="status-pending">Not Submitted</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="no-data">All assignments have been submitted.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  Profile
+{% endblock title %}
+
+{% block content %}
+  <div class="profile-container">
+    <div class="profile-header">
+      <h2>{{ user.get_full_name|default:user.username }}</h2>
+      <p>{{ user.email }}</p>
+    </div>
+
+    <div class="profile-details">
+      <label>Username:</label>
+      <span>{{ user.username }}</span>
+
+      <label>Email:</label>
+      <span>{{ user.email }}</span>
+
+      <label>Role:</label>
+      <span>
+        {% if user.is_staff %}
+          Teacher
+        {% else %}
+          Student
+        {% endif %}
+      </span>
+
+      {% if user.is_student %}
+        <label>Admission Number:</label>
+        <span>{{ student_profile.student_id }}</span>
+
+        <label>Class:</label>
+        <span>{{ student_profile.class_name }}</span>
+
+        <label>Guardian Contact:</label>
+        <span>{{ student_profile.guardian_contact }}</span>
+      {% elif user.is_teacher %}
+        <label>Teacher ID:</label>
+        <span>{{ teacher_profile.teacher_id }}</span>
+
+        <label>Teaching Class:</label>
+        <span>{{ teacher_profile.teaching_class }}</span>
+      {% elif user.is_parent %}
+        <label>Parent ID:</label>
+        <span>{{ parent_profile.parent_id }}</span>
+
+        <label>Phone Number:</label>
+        <span>{{ parent_profile.phone_number }}</span>
+
+        <label>Student Admission:</label>
+        <span>{{ students_profile.student_adm }}</span>
+      {% endif %}
+
+      <label>Date of Birth:</label>
+      <span>{{ user.date_of_birth }}</span>
+
+      <label>Date Joined:</label>
+      <span>{{ user.date_joined|date:"F d, Y" }}</span>
+
+      {% if user.last_login %}
+        <label>Last Login:</label>
+        <span>{{ user.last_login|date:"F d, Y, h:i A" }}</span>
+      {% endif %}
+    </div>
+
+    <a href="#" class="edit-btn">Edit Profile</a>
+  </div>
+{% endblock content %}

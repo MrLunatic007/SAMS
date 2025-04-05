@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .permissions import role_required
 from members.models import StudentProfile, TeacherProfile, Subjects, ParentProfile
 from .models import Notice, Assignments, AssignmentSubmission
-from django.http import FileResponse, Http404, HttpResponse
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 import os
 from django.conf import settings
 from wsgiref.util import FileWrapper
@@ -14,196 +14,193 @@ from django.contrib import messages
 from django.utils import timezone
 
 
-@login_required(login_url='members:index')
+@login_required(login_url='members:userSelection')
 def access_denied(request):
-    return render(request, 'access.html', status=403)
+    return render(request, 'UI/access.html', status=403)
 
-################################################################################
-################################################################################
-################################################################################
-############################Student Views#######################################
-################################################################################
-################################################################################
-################################################################################
-################################################################################
-################################################################################
-
-@role_required('is_student')
-@login_required(login_url='members:student_user_login')
-def studentdash(request):
+@login_required(login_url='members:index')
+def profile(request):
+    context = {}
     try:
-        student_profile = StudentProfile.objects.get(user=request.user)
-        study_profile = student_profile.subjects.all()
-        noticeb = Notice.objects.all()
-    except StudentProfile.DoesNotExist or Subjects.DoesNotExist:
-        student_profile = None  # Handle the case where the profile doesn't exist
-        noticeb = None
-        study_profile = None    
+        if request.user.is_student:
+            profile_instance = StudentProfile.objects.get(user=request.user)
+            context['student_profile'] = profile_instance
+        elif request.user.is_teacher:
+            profile_instance = TeacherProfile.objects.get(user=request.user)
+            context['teacher_profile'] = profile_instance
+        elif request.user.is_parent:
+            profile_instance = ParentProfile.objects.get(user=request.user)
+            context['parent_profile'] = profile_instance
+            context['students_profile'] = profile_instance.student
+    except (StudentProfile.DoesNotExist, TeacherProfile.DoesNotExist, ParentProfile.DoesNotExist):
+        messages.error(request, "Profile not found.")
+        return redirect('members:index')
 
-    context = {
-        'user': request.user,
-        'student_profile': student_profile,
-        'current_page': 'dashboard',
-        'study_profile': study_profile,
-        'noticeb': noticeb
-    }
-    return render(request, 'Students/dash.html', context)
+    return render(request, 'UI/profile.html', context)
 
-@role_required('is_student')
-@login_required(login_url='members:student_user_login')
-def s_assignment(request):
-    assigns = Assignments.objects.all()
-    submissions = {
-        sub.assignment_id: sub 
-        for sub in AssignmentSubmission.objects.filter(student__user=request.user)
-    }
-    return render(request, 'Students/assignments.html', {
-        'assigns': assigns,
-        'submissions': submissions
-    })
-
-@role_required('is_student')
-@login_required(login_url='members:student_user_login')  # Fixed typo in URL
-def download(request, id):
-    # Retrieve the assignment based on the given ID
-    item = get_object_or_404(Assignments, id=id)
-    
-    # Check if the file exists
-    if not item.file_name:
-        raise Http404("File not found")
-    
-    # Get the file path
-    file_path = os.path.join(settings.MEDIA_ROOT, str(item.file_name))
-    
-    # Verify the file exists and is within MEDIA_ROOT
-    if not os.path.exists(file_path) or not os.path.commonpath([file_path, settings.MEDIA_ROOT]) == settings.MEDIA_ROOT:
-        raise Http404("File not found")
-    
-    # Get the filename from the path
-    filename = os.path.basename(file_path)
-    
-    try:
-        # Open the file in binary mode
-        file = open(file_path, 'rb')
-        # Create the response with the file
-        response = FileResponse(FileWrapper(file), content_type='application/force-download')
-        # Set content disposition and filename
-        response['Content-Disposition'] = f'attachment; filename="{filename}"'
-        return response
-    except Exception as e:
-        print(f"Error serving file: {e}")  # For debugging
-        raise Http404("Error accessing file")
-
-
-@role_required('is_student')
-@login_required(login_url='members:student_user_login')
-def view_assignment(request, assignment_id):
-    assignment = get_object_or_404(Assignments, id=assignment_id)
-    submission = AssignmentSubmission.objects.filter(
-        student__user=request.user,
-        assignment=assignment
-    ).first()
-    
-    # Check due date and handle submissions
-    # In view_assignment view
-    if assignment.due_date < timezone.now().date():  # Changed from datetime.now()
-        if submission:
-            messages.error(request, "You have already submitted this assignment.")
-        else:
-            messages.error(request, "The deadline for submitting this assignment has passed.")
-        return render(request, 'Students/document_viewer.html', {
-            'assignment': assignment,
-            'submission': submission,
-        })
-
-    if request.method == 'POST':
-        submission_file = request.FILES.get('submission_file')
-        submission_text = request.POST.get('submission_text')
+def notification_processor(request):
+    """
+    Context processor to add notification count to all templates.
+    """
+    if request.user.is_authenticated:
+        try:
+            notification_count = Notice.objects.count()
+        except:
+            notification_count = 0
         
-        if submission:
-            messages.error(request, "You have already submitted this assignment.")
-        else:
-            submission = AssignmentSubmission.objects.create(
-                student=request.user.studentprofile,
-                assignment=assignment,
-                submission_file=submission_file,
-                answer_text=submission_text,
-                status='submitted'
-            )
-            messages.success(request, "Assignment submitted successfully.")
-            
-        return redirect('core:student_assignment')
+        return {
+            'notification_count': notification_count
+        }
+    return {'notification_count': 0}
 
-    return render(request, 'Students/document_viewer.html', {
-        'assignment': assignment,
-        'submission': submission,
-    })
-
-################################################################################
-################################################################################
-################################################################################
-############################Teacher Viwes#######################################
-################################################################################
-################################################################################
-################################################################################
-################################################################################
-################################################################################
-
-@role_required('is_teacher')
-@login_required(login_url='members:teacher_user_login')  # Specify the login URL
-def teacherdash(request):
+@login_required
+def mark_notifications_as_read(request):
+    """
+    Mark all notifications as read for the current user.
+    """
     try:
-        teacher_profile = TeacherProfile.objects.get(user=request.user)
-        subjects_taught = teacher_profile.subjects_taught.all()  # Get all subjects the teacher is teaching
-        noticeb = Notice.objects.all()
-    except TeacherProfile.DoesNotExist:
-        teacher_profile = None
-        subjects_taught = None
-        noticeb = None  # Add this to avoid potential errors
+        # Get all unread notices
+        notices = Notice.objects.all()
+        
+        # Mark them as read by adding the current user to read_by
+        for notice in notices:
+            notice.read_by.add(request.user)
+        
+        return JsonResponse({'status': 'success'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)})
 
+def get_notification_count(request):
+    """
+    Returns the count of unread notifications for the current user.
+    """
+    try:
+        notification_count = Notice.objects.count()
+        return notification_count
+    except:
+        return 0
+
+################################################################################
+# Consolidated Dashboard View
+################################################################################
+@login_required
+def dashboard(request):
     context = {
         'user': request.user,
-        'teacher_profile': teacher_profile,
-        'subjects_taught': subjects_taught,
-        'noticeb': noticeb,
+        'noticeb': Notice.objects.all()
     }
-    return render(request, 'Teachers/dash.html', context)
+    
+    try:
+        if request.user.is_student:
+            student_profile = StudentProfile.objects.get(user=request.user)
+            context['student_profile'] = student_profile
+            context['study_profile'] = student_profile.subjects.all()
+            
+        elif request.user.is_teacher:
+            teacher_profile = TeacherProfile.objects.get(user=request.user)
+            context['teacher_profile'] = teacher_profile
+            context['subjects_taught'] = teacher_profile.subjects_taught.all()
+            
+        elif request.user.is_parent:
+            parent_profile = ParentProfile.objects.get(user=request.user)
+            context['parent_profile'] = parent_profile
+            
+            # Get related student profiles
+            students_profile = StudentProfile.objects.filter(id__in=parent_profile.students.all())
+            context['students_profile'] = students_profile
+            
+            # If viewing a specific student, add their subjects to context
+            if 'student_id' in request.GET:
+                try:
+                    student = students_profile.get(student_id=request.GET['student_id'])
+                    context['study_profile'] = student.subjects.all()
+                except StudentProfile.DoesNotExist:
+                    pass
+    except (StudentProfile.DoesNotExist, TeacherProfile.DoesNotExist, ParentProfile.DoesNotExist):
+        messages.error(request, "Profile not found.")
+    
+    return render(request, 'UI/dashboard.html', context)
 
-@role_required('is_teacher')
-@login_required(login_url='members:teacher_user_login')
-def t_assignments(request):
-    current_date = datetime.now()
-    if request.method == "POST":
+################################################################################
+# Consolidated Assignment Views
+################################################################################
+@login_required
+def assignments(request):
+    context = {
+        'user': request.user,
+        'assigns': Assignments.objects.all(),
+        'current_date': datetime.now()
+    }
+    
+    if request.user.is_student:
+        # Student assignments view with submissions
+        submissions = {
+            sub.assignment_id: sub 
+            for sub in AssignmentSubmission.objects.filter(student__user=request.user)
+        }
+        context['submissions'] = submissions
+        
+    elif request.user.is_teacher and request.method == "POST":
+        # Teacher assignment creation
         name = request.POST.get('title')
         due_date = request.POST.get('due_date')
         file = request.FILES.get('file')
         description = request.POST.get('description')
-        createDate = current_date
-
-
+        
         new_assign = Assignments(
             name=name,
             description=description,
             due_date=due_date,
             file_name=file,
-            createDate=createDate,
+            createDate=datetime.now(),
         )
         new_assign.save()
-            
-        return redirect('core:teacher_assignments')
+        return redirect('core:assignments')
+    
+    return render(request, 'UI/assignment.html', context)
 
-    assigns = Assignments.objects.all()
-    return render(request, 'Teachers/assignments.html', {'assigns': assigns, 'current_date': current_date})
+@login_required
+def download_assignment(request, id):
+    item = get_object_or_404(Assignments, id=id)
+    
+    if not item.file_name:
+        raise Http404("File not found")
+    
+    file_path = os.path.join(settings.MEDIA_ROOT, str(item.file_name))
+    
+    if not os.path.exists(file_path) or not os.path.commonpath([file_path, settings.MEDIA_ROOT]) == settings.MEDIA_ROOT:
+        raise Http404("File not found")
+    
+    filename = os.path.basename(file_path)
+    
+    try:
+        file = open(file_path, 'rb')
+        response = FileResponse(FileWrapper(file), content_type='application/force-download')
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        return response
+    except Exception as e:
+        print(f"Error serving file: {e}")
+        raise Http404("Error accessing file")
 
-@role_required('is_teacher')
-@login_required(login_url='members:teacher_user_login')
-def notice(request):
-    if request.method == "POST":
+@login_required
+def delete_assignment(request, id):
+    if not request.user.is_teacher:
+        return redirect('core:access_denied')
+        
+    item = get_object_or_404(Assignments, id=id)
+    item.delete()
+    return redirect('core:assignments')
+
+################################################################################
+# Notice Views
+################################################################################
+@login_required
+def notice_board(request):
+    if request.user.is_teacher and request.method == "POST":
         title = request.POST.get('title')
         importance = request.POST.get('importance')
-        description = request.POST.get('content')  # Rename 'notice' to 'description' to match model field
+        description = request.POST.get('content')
 
-        # Create and save a new Notice instance
         new_notice = Notice(
             name=title,
             importance=importance,
@@ -211,70 +208,48 @@ def notice(request):
         )
         new_notice.save()
 
-        # Redirect to the same page or another after saving
-        # return redirect('core:notice')  # Replace 'notice' with the name of your notice page route
-
-    # If GET request, display existing notices
     noticeb = Notice.objects.all()
-    return render(request, 'Teachers/notice.html', {'noticeb': noticeb})
+    return render(request, 'UI/notice.html', {'noticeb': noticeb})
 
-@role_required('is_teacher')
-@login_required(login_url='members:teacher_user_login')
-def teacher_view_submissions(request):
-    submissions = AssignmentSubmission.objects.select_related('student', 'assignment').filter(status='submitted').order_by('-submitted_at')
-    
-    return render(request, 'Teachers/view_submissions.html', {
-        'submissions': submissions
-    })
-
-@role_required('is_teacher')
-@login_required(login_url='members:teacher_user_login')
-def assign_delete(request, id):
-    item = get_object_or_404(Assignments, id=id)
-    item.delete()
-    return redirect('core:teacher_assignments')
-
-@role_required('is_teacher')
-@login_required(login_url='members:teacher_user_login')
-def notice_delete(request, id):
+@login_required
+def delete_notice(request, id):
+    if not request.user.is_teacher:
+        return redirect('core:access_denied')
+        
     item = get_object_or_404(Notice, id=id)
     item.delete()
-    return redirect('core:notice')
+    return redirect('core:notice_board')
 
 ################################################################################
+# Teacher Submission Views
 ################################################################################
-################################################################################
-############################Parent Viwes########################################
-################################################################################
-################################################################################
-################################################################################
-################################################################################
-################################################################################
-def parent_dash(request):
-    try:
-        parent_profile = ParentProfile.objects.get(user=request.user)
-        students_profile = StudentProfile.objects.all()
-        parents_profile = ParentProfile.students_adm
-        noticeb = Notice.objects.all()
-    except:
-        parent_profile = None
-        noticeb = None
-        students_profile = None
-        parents_profile = None
-
-    for student_profile in students_profile:
-        if student_profile == parents_profile:
-            context = {
-                'parent_profile': parent_profile,
-                'noticeb': noticeb,
-                'students_profile': students_profile
-            }
-        else: 
-            context = {
-                'parent_profile': parent_profile,
-                'noticeb': noticeb,
-            }
-    return render(request, 'Parent/dash.html', context)
-
-def parent_studentProgress(request):
-    return render(request, 'Parent/studentProgess.html')
+@login_required
+def view_submissions(request):
+    if not request.user.is_teacher:
+        return redirect('core:access_denied')
+        
+    submissions = AssignmentSubmission.objects.select_related('student', 'assignment').filter(status='submitted').order_by('-submitted_at')
+    
+    # Get all students who haven't submitted assignments
+    all_assignments = Assignments.objects.all()
+    all_students = StudentProfile.objects.all()
+    
+    # Create a dictionary of non-submissions
+    non_submissions = []
+    
+    for assignment in all_assignments:
+        for student in all_students:
+            # Check if this student has submitted this assignment
+            if not AssignmentSubmission.objects.filter(
+                student=student, 
+                assignment=assignment
+            ).exists():
+                non_submissions.append({
+                    'student': student,
+                    'assignment': assignment
+                })
+    
+    return render(request, 'UI/view_submissions.html', {
+        'submissions': submissions,
+        'non_submissions': non_submissions
+    })
