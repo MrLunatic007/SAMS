@@ -106,7 +106,7 @@ def dashboard(request):
             context['parent_profile'] = parent_profile
             
             # Get related student profiles
-            students_profile = StudentProfile.objects.filter(id__in=parent_profile.students.all())
+            students_profile = StudentProfile.objects.filter(guardian_contact=[parent_profile])
             context['students_profile'] = students_profile
             
             # If viewing a specific student, add their subjects to context
@@ -120,6 +120,7 @@ def dashboard(request):
         messages.error(request, "Profile not found.")
     
     return render(request, 'UI/dashboard.html', context)
+
 
 ################################################################################
 # Consolidated Assignment Views
