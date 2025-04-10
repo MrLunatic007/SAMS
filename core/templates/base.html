@@ -41,7 +41,7 @@
       {% elif user.is_teacher %}
       <a href="{% url 'core:teacher_assignments' %}" class="page-scroll {% if request.resolver_match.url_name == 'teacher_assignments' %}active{% endif %}">
       {% elif user.is_parent %}
-      <a href="{% url 'core:parent_studentProgress' %}" class="page-scroll {% if request.resolver_match.url_name == 'parent_studentProgress' %}active{% endif %}">
+      <a href="{% url 'core:progress' %}" class="page-scroll {% if request.resolver_match.url_name == 'parent_studentProgress' %}active{% endif %}">
       {% endif %}
         <span class="material-icons-sharp">assignment</span>
         <h3>{% if user.is_parent %}Student Progress{% else %}Assignments{% endif %}</h3>

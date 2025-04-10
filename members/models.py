@@ -54,10 +54,10 @@ class TeacherProfile(models.Model):
         return f"Teacher: {self.user.username} (ID: {self.teacher_id})"
     
 class ParentProfile(models.Model):
-    students_adm = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name='parents')
+    students_adm = models.ManyToManyField(StudentProfile, related_name='parents')
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=20)
     parent_id = models.CharField(max_length=100, primary_key=True)
-    
+
     def __str__(self):
         return f"Parent Name: {self.user.username} (ID: {self.parent_id})"

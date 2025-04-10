@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}
+  Student Progress
+{% endblock title %}
+
+{% block content %}
+  <main>
+    <h1>Student Progress Report</h1>
+
+    {% if not student_profile %}
+      <div class="error-message">
+        <span class="error-icon">⚠️</span>
+        <p>No student profiles found. Please contact an administrator.</p>
+      </div>
+    {% else %}
+      {% if user.is_parent %}
+        
+        <div class="student-selector">
+          <h3>Select Student</h3>
+          <div class="form-group">
+            <select id="student-selector" onchange="location = this.value;">
+              <option value="">Select a student...</option>
+              {% for student in student_profile %}
+                <option value="?student_id={{ student.student_id }}" {% if request.GET.student_id == student.student_id %}selected{% endif %}>
+                  {{ student.user.get_full_name|default:student.user.username }} ({{ student.student_id }})
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        {% if request.GET.student_id %}
+          <div class="selected-student-info">
+            {% for student in student_profile %}
+              {% if student.student_id == request.GET.student_id %}
+                <div class="profile-summary">
+                  <div class="info">
+                    <p>{{ student.user.get_full_name|default:student.user.username }}</p>
+                    <small>Class: {{ student.class_name }}</small>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endif %}
+
+      <div class="container">
+        <div class="progress-section">
+          <h2>Assignment Progress</h2>
+          
+          <table>
+            <thead>
+              <tr>
+                <th>Assignment</th>
+                <th>Subject</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Submission Date</th>
+                <th>Grade</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for assignment in assignments %}
+                <tr>
+                  <td>{{ assignment.name }}</td>
+                  <td>{% if assignment.subject %}{{ assignment.subject }}{% else %}General{% endif %}</td>
+                  <td>{{ assignment.due_date }}</td>
+                  <td>
+                    {% if assignment.id in submissions %}
+                      {% with sub=submissions|get_item:assignment.id %}
+                        {% if sub.status == 'submitted' %}
+                          <span class="status-badge submitted">Submitted</span>
+                        {% elif sub.status == 'graded' %}
+                          <span class="status-badge graded">Graded</span>
+                        {% elif sub.status == 'late' %}
+                          <span class="status-badge late">Late</span>
+                        {% endif %}
+                      {% endwith %}
+                    {% else %}
+                      {% if assignment.due_date < current_date %}
+                        <span class="status-badge overdue">Overdue</span>
+                      {% else %}
+                        <span class="status-badge pending">Pending</span>
+                      {% endif %}
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if assignment.id in submissions %}
+                      {{ submissions|get_item:assignment.id|get_attr:"submitted_at"|date:"F d, Y" }}
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if assignment.id in submissions and submissions|get_item:assignment.id|get_attr:"grade" %}
+                      {{ submissions|get_item:assignment.id|get_attr:"grade" }}
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="6" class="text-center">No assignments found</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Progress Summary -->
+        <div class="progress-summary">
+          <h2>Progress Summary</h2>
+          
+          <div class="summary-cards">
+            <div class="summary-card">
+              <div class="summary-title">Completed</div>
+              <div class="summary-value">{{ completed_count }}</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-title">Pending</div>
+              <div class="summary-value">{{ pending_count }}</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-title">Overdue</div>
+              <div class="summary-value">{{ overdue_count }}</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-title">Total</div>
+              <div class="summary-value">{{ total_count }}</div>
+            </div>
+          </div>
+          
+          <div class="progress-bar-container">
+            <div class="progress-label">Overall Progress</div>
+            <div class="progress-bar">
+              <div class="progress-value" style="width: {{ completion_percentage }}%;">
+                {{ completion_percentage }}%
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subject Breakdown -->
+        <div class="subjects-breakdown">
+          <h2>Subject Performance</h2>
+          
+          <div class="subjects">
+            {% for subject in subject_performance %}
+              <div class="eg">
+                <h3>{{ subject.name }}</h3>
+                <p>Completed: {{ subject.completed }}/{{ subject.total }}</p>
+                <p>Average Grade: {{ subject.average_grade|default:"-" }}</p>
+                <div class="progress-bar">
+                  <div class="progress-value" style="width: {{ subject.percentage }}%;">
+                    {{ subject.percentage }}%
+                  </div>
+                </div>
+              </div>
+            {% empty %}
+              <div class="eg">
+                <h3>No subject data available</h3>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </main>
+
+  <!-- Add custom CSS for progress page -->
+  <style>
+    .status-badge {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      border-radius: 1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .status-badge.submitted {
+      background: var(--primary-cyan);
+      color: white;
+    }
+    
+    .status-badge.graded {
+      background: var(--primary-green);
+      color: white;
+    }
+    
+    .status-badge.pending {
+      background: var(--primary-yellow);
+      color: var(--text-main);
+    }
+    
+    .status-badge.overdue,
+    .status-badge.late {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .progress-section {
+      margin-bottom: 2rem;
+    }
+    
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .summary-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: all 300ms ease;
+    }
+    
+    body.dark-theme .summary-card {
+      background: var(--dark-card-bg);
+    }
+    
+    .summary-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+    }
+    
+    .summary-title {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+    
+    body.dark-theme .summary-title {
+      color: var(--dark-text);
+    }
+    
+    .summary-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--primary-cyan);
+    }
+    
+    .progress-bar-container {
+      margin-top: 1.5rem;
+    }
+    
+    .progress-label {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .progress-bar {
+      height: 1rem;
+      background: var(--background-light);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    
+    body.dark-theme .progress-bar {
+      background: var(--dark-bg);
+    }
+    
+    .progress-value {
+      height: 100%;
+      background: var(--primary-green);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      transition: width 1s ease;
+    }
+    
+    .student-selector {
+      background: var(--card-bg);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+    
+    body.dark-theme .student-selector {
+      background: var(--dark-card-bg);
+    }
+    
+    .student-selector h3 {
+      margin-bottom: 1rem;
+      color: var(--primary-cyan);
+    }
+    
+    .selected-student-info {
+      margin-bottom: 1.5rem;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+  </style>
+  
+  <!-- Template filter for dictionary access since Django doesn't have one built-in -->
+  <script>
+    // Add custom templatetags to create a dictionary lookup filter
+    // This simulates what would normally be created in a templatetags file
+    document.addEventListener('DOMContentLoaded', function() {
+      // This is just a client-side representation - in a real app,
+      // you'd add a proper Django template filter
+    });
+  </script>
+{% endblock content %}

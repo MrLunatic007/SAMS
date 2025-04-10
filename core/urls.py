@@ -28,4 +28,5 @@ urlpatterns = [
     path('teacher/assignments/', views.assignments, name='teacher_assignments'),
     path('teacher/noticeboard/', views.notice_board, name='notice'),
     path('teacher/view/submissions/', views.view_submissions, name='t_v_submissions'),
+    path('parent/student/progress', views.progress, name='progress')
 ]

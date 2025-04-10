@@ -21,10 +21,16 @@
 
       <label>Role:</label>
       <span>
-        {% if user.is_staff %}
+        {% if user.is_teacher %}
           Teacher
-        {% else %}
+        {% elif user.is_student %}
           Student
+        {% elif user.is_parent %}
+          Parent
+        {% elif user.is_admin %}
+          Administrator
+        {% else %}
+          User
         {% endif %}
       </span>
 
@@ -43,6 +49,13 @@
 
         <label>Teaching Class:</label>
         <span>{{ teacher_profile.teaching_class }}</span>
+        
+        <label>Subjects Taught:</label>
+        <span>
+          {% for subject in teacher_profile.subjects_taught.all %}
+            {{ subject.name }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </span>
       {% elif user.is_parent %}
         <label>Parent ID:</label>
         <span>{{ parent_profile.parent_id }}</span>
@@ -50,8 +63,12 @@
         <label>Phone Number:</label>
         <span>{{ parent_profile.phone_number }}</span>
 
-        <label>Student Admission:</label>
-        <span>{{ students_profile.student_adm }}</span>
+        <label>Child:</label>
+        <span>
+          {% for student in students_profile %}
+            {{ student.user.get_full_name|default:student.user.username }} ({{ student.student_id }}){% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </span>
       {% endif %}
 
       <label>Date of Birth:</label>
@@ -65,7 +82,5 @@
         <span>{{ user.last_login|date:"F d, Y, h:i A" }}</span>
       {% endif %}
     </div>
-
-    <a href="#" class="edit-btn">Edit Profile</a>
   </div>
 {% endblock content %}

@@ -29,13 +29,17 @@ def profile(request):
             profile_instance = TeacherProfile.objects.get(user=request.user)
             context['teacher_profile'] = profile_instance
         elif request.user.is_parent:
-            profile_instance = ParentProfile.objects.get(user=request.user)
-            context['parent_profile'] = profile_instance
-            context['students_profile'] = profile_instance.student
+            parent_profile = ParentProfile.objects.get(user=request.user)
+            context['parent_profile'] = parent_profile
+            context['students_profile'] = parent_profile.students_adm.all()
     except (StudentProfile.DoesNotExist, TeacherProfile.DoesNotExist, ParentProfile.DoesNotExist):
         messages.error(request, "Profile not found.")
         return redirect('members:index')
-
+    
+    # Add the user to the context
+    context['user'] = request.user
+    
+    # Return the render response - this line was missing
     return render(request, 'UI/profile.html', context)
 
 def notification_processor(request):
@@ -83,6 +87,7 @@ def get_notification_count(request):
 ################################################################################
 # Consolidated Dashboard View
 ################################################################################
+
 @login_required
 def dashboard(request):
     context = {
@@ -100,15 +105,13 @@ def dashboard(request):
             teacher_profile = TeacherProfile.objects.get(user=request.user)
             context['teacher_profile'] = teacher_profile
             context['subjects_taught'] = teacher_profile.subjects_taught.all()
-            
         elif request.user.is_parent:
             parent_profile = ParentProfile.objects.get(user=request.user)
             context['parent_profile'] = parent_profile
-            
             # Get related student profiles
-            students_profile = StudentProfile.objects.filter(guardian_contact=[parent_profile])
+            students_profile = parent_profile.students_adm.all()  # Change Here
             context['students_profile'] = students_profile
-            
+
             # If viewing a specific student, add their subjects to context
             if 'student_id' in request.GET:
                 try:
@@ -125,6 +128,7 @@ def dashboard(request):
 ################################################################################
 # Consolidated Assignment Views
 ################################################################################
+
 @login_required
 def assignments(request):
     context = {
@@ -195,6 +199,7 @@ def delete_assignment(request, id):
 ################################################################################
 # Notice Views
 ################################################################################
+
 @login_required
 def notice_board(request):
     if request.user.is_teacher and request.method == "POST":
@@ -254,3 +259,142 @@ def view_submissions(request):
         'submissions': submissions,
         'non_submissions': non_submissions
     })
+
+##################################################
+# Parent related views
+##################################################
+@login_required
+def progress(request):
+    context = {}
+    
+    # For parent view
+    if request.user.is_parent:
+        try:
+            parent_profile = ParentProfile.objects.get(user=request.user)
+            # Get all students associated with this parent
+            student_profiles = parent_profile.students_adm.all() # Change Here
+            print(f"Parent: {parent_profile}")
+            print(f"Students: {student_profiles}")
+            context['student_profile'] = student_profiles
+            
+            # If a specific student is selected
+            if 'student_id' in request.GET:
+                student_id = request.GET['student_id']
+                try:
+                    selected_student = student_profiles.get(student_id=student_id)
+                    print(f"Selected Student: {selected_student}")
+                    # Set context for the selected student
+                    return get_student_progress(request, selected_student, context)
+                except StudentProfile.DoesNotExist:
+                    messages.error(request, "Student not found.")
+        except ParentProfile.DoesNotExist:
+            messages.error(request, "Parent profile not found.")
+    
+    # For student view
+    elif request.user.is_student:
+        try:
+            student_profile = StudentProfile.objects.get(user=request.user)
+            context['student_profile'] = [student_profile]  # Wrap in list for consistent template handling
+            # Get progress for the student
+            return get_student_progress(request, student_profile, context)
+        except StudentProfile.DoesNotExist:
+            messages.error(request, "Student profile not found.")
+    
+    # For teacher view - can see all students
+    elif request.user.is_teacher:
+        try:
+            teacher_profile = TeacherProfile.objects.get(user=request.user)
+            # Get students in teacher's class
+            student_profiles = StudentProfile.objects.filter(class_name=teacher_profile.teaching_class)
+            context['student_profile'] = student_profiles
+            
+            # If a specific student is selected
+            if 'student_id' in request.GET:
+                student_id = request.GET['student_id']
+                try:
+                    selected_student = student_profiles.get(student_id=student_id)
+                    # Set context for the selected student
+                    return get_student_progress(request, selected_student, context)
+                except StudentProfile.DoesNotExist:
+                    messages.error(request, "Student not found.")
+        except TeacherProfile.DoesNotExist:
+            messages.error(request, "Teacher profile not found.")
+    
+    return render(request, 'UI/progress.html', context)
+
+def get_student_progress(request, student, context):
+    # Get all assignments
+    assignments = Assignments.objects.all()
+    
+    # Get student's submissions
+    submissions = AssignmentSubmission.objects.filter(student=student)
+    
+    # Create a dictionary of submissions keyed by assignment id
+    submissions_dict = {sub.assignment.id: sub for sub in submissions}
+    
+    # Current date for checking overdue assignments
+    current_date = timezone.now()
+    
+    # Count statistics
+    completed_count = submissions.filter(status__in=['submitted', 'graded']).count()
+    total_count = assignments.count()
+    overdue_count = 0
+    pending_count = 0
+    
+    # Check for overdue assignments
+    for assignment in assignments:
+        # Convert assignment.due_date to datetime for comparison
+        if assignment.id not in submissions_dict and timezone.make_aware(datetime.combine(assignment.due_date, datetime.min.time()), timezone.get_default_timezone()) < current_date:
+            overdue_count += 1
+        elif assignment.id not in submissions_dict:
+            pending_count += 1
+            
+    # Calculate completion percentage
+    completion_percentage = 0
+    if total_count > 0:
+        completion_percentage = int((completed_count / total_count) * 100)
+    
+    # Get subject performance
+    subject_performance = []
+    student_subjects = student.subjects.all()
+    
+    for subject in student_subjects:
+        # Get assignments for the subject.
+        # FIX: Using the correct related_name 'student_submissions' instead of 'studentsubmission'
+        subject_assignments = Assignments.objects.filter(student_submissions__student=student, student_submissions__assignment__in=assignments)
+        subject_total = subject_assignments.count()
+        
+        if subject_total > 0:
+            subject_submissions = AssignmentSubmission.objects.filter(assignment__in=subject_assignments)
+            subject_completed = subject_submissions.count()
+            subject_percentage = int((subject_completed / subject_total) * 100)
+            
+            # Calculate average grade if there are graded assignments
+            graded_submissions = subject_submissions.filter(status='graded')
+            average_grade = None
+            if graded_submissions.exists():
+                total_grade = sum(sub.grade for sub in graded_submissions if sub.grade is not None)
+                average_grade = round(total_grade / graded_submissions.count(), 1)
+                
+            subject_performance.append({
+                'name': subject.name,
+                'completed': subject_completed,
+                'total': subject_total,
+                'percentage': subject_percentage,
+                'average_grade': average_grade
+            })
+    
+    # Add data to context
+    context.update({
+        'assignments': assignments,
+        'submissions': submissions_dict,
+        'current_date': current_date,
+        'completed_count': completed_count,
+        'pending_count': pending_count,
+        'overdue_count': overdue_count,
+        'total_count': total_count,
+        'completion_percentage': completion_percentage,
+        'subject_performance': subject_performance
+    })
+    
+    return render(request, 'UI/progress.html', context)
