@@ -1,7 +1,8 @@
 services:
   - type: web
-    name: sams-wef5
+    name: sams-wef5 # Make sure this matches your Render web service name
     env: python
+    # Ensure all required dependencies are in requirements.txt (gunicorn, whitenoise, psycopg2-binary, dj-database-url)
     buildCommand: |
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
@@ -9,11 +10,11 @@ services:
     startCommand: gunicorn SAMS.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: SECRET_KEY
-        generateValue: true
+        generateValue: true # Render will generate a strong secret key for you
       - key: WEB_CONCURRENCY
-        value: 4 # Adjust based on your instance type and app needs
+        value: 4 # You can adjust this based on your plan and app's needs
       - key: DEBUG
-        value: "False"
-      # - key: DATABASE_URL # Uncomment if you switch to PostgreSQL on Render
-      #   fromDatabase:
-      #     name: your_database_name_on_render
+        value: "False" # Set to "True" temporarily for debugging if needed, but "False" for production
+      - key: DATABASE_URL # This line connects your web service to the database service
+        fromDatabase:
+          name: webz_db_681p # <--- IMPORTANT: Use the exact database name from your Render DB dashboard!
