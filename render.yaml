@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: sams-wef5
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+    startCommand: gunicorn SAMS.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4 # Adjust based on your instance type and app needs
+      - key: DEBUG
+        value: "False"
+      # - key: DATABASE_URL # Uncomment if you switch to PostgreSQL on Render
+      #   fromDatabase:
+      #     name: your_database_name_on_render
