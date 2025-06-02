@@ -1,24 +1,22 @@
-from pathlib import Path
 import os
+from pathlib import Path
+import dj_database_url # Add this import for production database settings (if you use PostgreSQL on Render)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-r*uin$gz)(5f_drxsx+zq&d@2@)9mn+7$@60yzrcs-#x1v#hx$'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'your_default_secret_key_for_dev') # Use environment variable for production
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DEBUG', 'False') == 'True' # Use environment variable for DEBUG
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['sams-wef5.onrender.com', '127.0.0.1', 'localhost'] # Add your Render domain and any other allowed hosts
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,10 +26,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'members',
+    # Add WhiteNoise to INSTALLED_APPS
+    'whitenoise.runserver_nostatic', # Only if you want WhiteNoise to handle static files in development (optional but useful)
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # Add WhiteNoiseMiddleware directly after SecurityMiddleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -45,8 +47,8 @@ ROOT_URLCONF = 'SAMS.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR/'templates',
-                 BASE_DIR/'core/templates'
+        'DIRS': [BASE_DIR / 'templates',
+                 BASE_DIR / 'core/templates'
                  ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -62,9 +64,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'SAMS.wsgi.application'
 
-COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'django_libsass.SassCompiler'),
-)
+# COMPRESS_PRECOMPILERS = ( # This might be conflicting with WhiteNoise or not needed if you compile CSS locally
+#     ('text/x-scss', 'django_libsass.SassCompiler'),
+# )
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -75,6 +78,11 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# For Render PostgreSQL (if you switch from SQLite)
+# DATABASE_URL = os.environ.get('DATABASE_URL')
+# if DATABASE_URL:
+#     DATABASES['default'] = dj_database_url.parse(DATABASE_URL)
 
 
 # Password validation
@@ -111,11 +119,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # This is correct
 
-ALLOWED_HOSTS = ['*']
+# Configure WhiteNoise to compress and cache static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# If you have static files outside of your app's 'static' folders (e.g., a top-level 'static' folder)
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -127,12 +140,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "members.CustomUser"
 
-CORS_REPLACE_HTTPS_REFERER      = False
-HOST_SCHEME                     = "http://"
-SECURE_PROXY_SSL_HEADER         = None
-SECURE_SSL_REDIRECT             = False
-SESSION_COOKIE_SECURE           = False
-CSRF_COOKIE_SECURE              = False
-SECURE_HSTS_SECONDS             = None
-SECURE_HSTS_INCLUDE_SUBDOMAINS  = False
-SECURE_FRAME_DENY               = False
+# SECURITY SETTINGS (Crucial for production)
+# These should generally be True in production, but you might need to adjust based on your specific Render setup.
+# Render typically handles HTTPS, so SECURE_PROXY_SSL_HEADER and SECURE_SSL_REDIRECT might be managed by them.
+
+CORS_REPLACE_HTTPS_REFERER = True # Generally True in production
+HOST_SCHEME = "https://" # Use HTTPS in production
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https') # Render might automatically set this up
+SECURE_SSL_REDIRECT = True # Redirect HTTP to HTTPS in production
+SESSION_COOKIE_SECURE = True # Ensure session cookies are sent over HTTPS
+CSRF_COOKIE_SECURE = True # Ensure CSRF cookies are sent over HTTPS
+SECURE_HSTS_SECONDS = 31536000 # 1 year - enables HTTP Strict Transport Security
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True # Apply HSTS to subdomains
+SECURE_FRAME_DENY = True # Prevents clickjacking (can be False if you need iframes from your domain)
